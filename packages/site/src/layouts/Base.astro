@@ -1,0 +1,45 @@
+---
+const { title, description, noindex = false, canonical } = Astro.props;
+const site = Astro.site?.href?.replace(/\/$/, '') || '';
+---
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  {description && <meta name="description" content={description} />}
+  {noindex && <meta name="robots" content="noindex,follow" />}
+  {canonical && <link rel="canonical" href={canonical} />}
+  <style is:global>
+    :root { --fg:#16181d; --mut:#697; --acc:#2563eb; --line:#e8ebef; --bg:#fff; --card:#f7f8fa; }
+    *{box-sizing:border-box} body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0;color:var(--fg);line-height:1.6}
+    a{color:var(--acc);text-decoration:none} a:hover{text-decoration:underline}
+    .wrap{max-width:920px;margin:0 auto;padding:0 18px}
+    header.site{border-bottom:1px solid var(--line);padding:14px 0;margin-bottom:24px}
+    header.site .brand{font-weight:800;font-size:18px;color:var(--fg)}
+    header.site .tag{color:var(--mut);font-size:13px}
+    footer.site{border-top:1px solid var(--line);margin-top:48px;padding:20px 0;color:var(--mut);font-size:12px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:10px 0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+    .pill{display:inline-block;background:#eef2ff;color:#3730a3;font-size:12px;padding:2px 9px;border-radius:999px;margin:2px 4px 2px 0}
+    h1{font-size:26px;line-height:1.3} h2{font-size:19px}
+    .mut{color:var(--mut)} .small{font-size:13px}
+    table{border-collapse:collapse;width:100%} td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+    td.k{color:var(--mut);width:120px;font-size:13px}
+    input,select{padding:9px 11px;border:1px solid #d4d8de;border-radius:8px;font-size:14px;font-family:inherit}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+    .disclaimer{background:#fffbeb;border:1px solid #fde68a;color:#92400e;font-size:12px;padding:10px 12px;border-radius:9px;margin-top:14px}
+  </style>
+</head>
+<body>
+  <header class="site"><div class="wrap">
+    <a href="/" class="brand">CivicNiche</a> <span class="tag">· 공공데이터 기반 디렉터리</span>
+  </div></header>
+  <main class="wrap"><slot /></main>
+  <footer class="site"><div class="wrap">
+    데이터 출처: 공공·오픈데이터(OSM ODbL 등). 정보는 정기 갱신되나 오류가 있을 수 있으며 법적 효력을 갖지 않습니다.
+    오류 신고는 각 페이지의 '정보 정정' 폼으로. © CivicNiche
+  </div></footer>
+</body>
+</html>

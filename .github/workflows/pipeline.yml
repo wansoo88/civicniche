@@ -1,0 +1,92 @@
+# §4 무인 운영 크론: fetch→정제→교차검증→품질게이트→(diff시)빌드→배포→IndexNow 핑.
+# 공개 레포 권장(Actions 무제한, §3). 시크릿은 레포 Settings>Secrets에 등록.
+name: civicniche-pipeline
+
+on:
+  schedule:
+    - cron: '17 18 * * *'   # 매일 야간(UTC) 1회 — 빌드 묶음(§3.1)
+  workflow_dispatch:
+    inputs:
+      niche:
+        description: '대상 니치 키'
+        default: 'fda-device-mfg'
+      force:
+        description: '데이터 무변경이어도 강제 빌드'
+        default: 'false'
+
+concurrency:
+  group: pipeline-${{ github.event.inputs.niche || 'fda-device-mfg' }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      NICHE: ${{ github.event.inputs.niche || 'fda-device-mfg' }}
+      NICHE_TITLE: ${{ vars.NICHE_TITLE || 'FDA Medical Device Contract Manufacturers' }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
+      INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+      SITE_URL: ${{ secrets.SITE_URL }}
+      LLM_MONTHLY_BUDGET_USD: '30'
+      # 수익화(프로필 A) — 사이트 빌드 시 패시브 수익원 주입
+      PUBLIC_ADSENSE_CLIENT: ${{ secrets.PUBLIC_ADSENSE_CLIENT }}
+      PUBLIC_ADSENSE_SLOT: ${{ secrets.PUBLIC_ADSENSE_SLOT }}
+      PUBLIC_DATASALE_URL: ${{ secrets.PUBLIC_DATASALE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # A~C: 데이터 파이프라인(의존성 0)
+      - name: Run data pipeline
+        run: node packages/data-pipeline/pipeline.mjs --niche="$NICHE"
+
+      # §3.1 빌드 트리거 게이트 — diff 없으면 이후 스텝 스킵
+      - name: Build gate (diff-aware)
+        id: gate
+        run: |
+          set +e
+          node scripts/build-trigger.mjs --niche="$NICHE" ${{ github.event.inputs.force == 'true' && '--force' || '' }}
+          code=$?
+          if [ "$code" = "78" ]; then echo "build=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          echo "build=true" >> "$GITHUB_OUTPUT"
+
+      - name: Install & build site
+        if: steps.gate.outputs.build == 'true'
+        run: |
+          npm --prefix packages/site install
+          npm --prefix packages/site run build
+
+      # 데이터 셀프판매 상품(자동생성 CSV)을 아티팩트로 — 영업 0, MoR 전달용
+      - name: Upload sellable dataset
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sellable-dataset-${{ env.NICHE }}
+          path: packages/data-pipeline/data/processed/${{ env.NICHE }}.sellable.csv
+          if-no-files-found: ignore
+
+      # 배포(예: Cloudflare Pages) — 시크릿 설정 시 활성화
+      # - name: Deploy to Cloudflare Pages
+      #   if: steps.gate.outputs.build == 'true'
+      #   uses: cloudflare/pages-action@v1
+      #   with:
+      #     apiToken: ${{ secrets.CF_API_TOKEN }}
+      #     accountId: ${{ secrets.CF_ACCOUNT_ID }}
+      #     projectName: civicniche
+      #     directory: packages/site/dist
+
+      # §4-E IndexNow 핑(빙·얀덱스 즉시 색인 유도)
+      - name: IndexNow ping
+        if: steps.gate.outputs.build == 'true' && env.INDEXNOW_KEY != ''
+        run: |
+          curl -s "https://api.indexnow.org/indexnow?url=${SITE_URL}&key=${INDEXNOW_KEY}" || true
+
+      # 리뷰 큐가 쌓이면 알림(§4.1) — 임계 이탈 시에만
+      - name: Review-queue alert
+        if: always()
+        run: |
+          node -e "const q=require('./packages/data-pipeline/data/review-queue.json'); if(q.length>20){console.log('::warning::needs_review 큐 '+q.length+'건 — 처리 필요')}" || true

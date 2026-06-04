@@ -1,0 +1,16 @@
+name = "civicniche-13a-collector"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+workers_dev = true   # → https://civicniche-13a-collector.<your-subdomain>.workers.dev
+
+# --- 배포 순서 ---
+# 1) KV 네임스페이스 생성 후, 출력된 id를 아래 id= 에 붙여넣기:
+#      npx wrangler kv namespace create SIGNALS
+# 2) /export(리드 회수) 보호용 관리 토큰(임의 문자열) 설정:
+#      npx wrangler secret put ADMIN_TOKEN
+# 3) 배포:
+#      npx wrangler deploy
+# 4) 랜딩(index.html)의 COLLECTOR_URL 을 "<배포주소>/submit" 으로 배선.
+[[kv_namespaces]]
+binding = "SIGNALS"
+id = "PUT_YOUR_KV_NAMESPACE_ID_HERE"

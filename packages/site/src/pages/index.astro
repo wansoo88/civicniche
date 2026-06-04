@@ -1,0 +1,84 @@
+---
+import Base from '../layouts/Base.astro';
+import AdSlot from '../components/AdSlot.astro';
+import { loadRecords, groupByRegion, NICHE_TITLE } from '../lib/data.mjs';
+import { DATA_SALE } from '../../monetization.config.mjs';
+
+const records = loadRecords();
+const regions = groupByRegion(records);
+const allServices = [...new Set(records.flatMap((r) => r.attributes?.services || []))];
+const title = `${NICHE_TITLE} 전국 디렉터리 | CivicNiche`;
+const description = `공공·오픈데이터로 정리한 ${NICHE_TITLE} ${records.length}곳. 지역·서비스별 필터, 요금·영업시간·위치 비교.`;
+---
+<Base title={title} description={description}>
+  <h1>{NICHE_TITLE} 전국 디렉터리</h1>
+  <p class="mut">공공·오픈데이터를 정제·교차검증해 정리했습니다. 현재 색인 대상 <strong>{records.length}곳</strong>.</p>
+
+  <!-- §5 AI Overviews 내성 = SERP가 복제 못 하는 인터랙티브 다축 필터(완화책) -->
+  <div class="controls">
+    <input id="q" type="search" placeholder="이름·주소 검색" />
+    <select id="region">
+      <option value="">전체 지역</option>
+      {regions.map(([r]) => <option value={r}>{r}</option>)}
+    </select>
+    <select id="service">
+      <option value="">전체 서비스</option>
+      {allServices.map((s) => <option value={s}>{s}</option>)}
+    </select>
+    <a class="small" id="csv" href="#" download>현재 목록 CSV</a>
+  </div>
+
+  {DATA_SALE.enabled && (
+    <div class="card">
+      📄 <strong>전체 데이터셋</strong>이 필요하세요? 정제·교차검증된 데이터를 CSV·API로 판매합니다.
+      <a href={DATA_SALE.checkoutUrl} rel="nofollow" style="font-weight:600">구매 ↗</a>
+    </div>
+  )}
+
+  <AdSlot />
+
+  <div class="grid" id="list">
+    {records.map((r) => (
+      <a class="card place" href={`/place/${r.id}/`}
+         data-name={r.name} data-region={r.region || ''} data-services={(r.attributes?.services || []).join(',')}>
+        <strong>{r.name}</strong>
+        <div class="small mut">{r.region} · {r.hours || '영업시간 미상'}</div>
+        <div>{(r.attributes?.services || []).map((s) => <span class="pill">{s}</span>)}</div>
+        {r.flags?.crossValidated && <div class="small" style="color:#16a34a">✓ 2개 출처 교차검증</div>}
+      </a>
+    ))}
+  </div>
+  <p class="mut small" id="count"></p>
+
+  <script>
+    const q = document.getElementById('q');
+    const region = document.getElementById('region');
+    const service = document.getElementById('service');
+    const items = [...document.querySelectorAll('.place')];
+    const count = document.getElementById('count');
+    function apply() {
+      const qs = (q.value || '').toLowerCase();
+      const rg = region.value, sv = service.value;
+      let shown = 0;
+      for (const el of items) {
+        const okQ = !qs || el.dataset.name.toLowerCase().includes(qs);
+        const okR = !rg || el.dataset.region === rg;
+        const okS = !sv || (el.dataset.services || '').split(',').includes(sv);
+        const show = okQ && okR && okS;
+        el.style.display = show ? '' : 'none';
+        if (show) shown += 1;
+      }
+      count.textContent = `${shown}곳 표시 중`;
+    }
+    [q, region, service].forEach((e) => e.addEventListener('input', apply));
+    apply();
+    // 현재 필터 결과를 CSV로 — 데이터 가치 맛보기(직판 퍼널 연결, §7)
+    document.getElementById('csv').addEventListener('click', (e) => {
+      const rows = items.filter((el) => el.style.display !== 'none')
+        .map((el) => [el.dataset.name, el.dataset.region, el.dataset.services].map((v) => `"${(v || '').replace(/"/g, '""')}"`).join(','));
+      const blob = new Blob(['name,region,services\n' + rows.join('\n')], { type: 'text/csv' });
+      e.currentTarget.href = URL.createObjectURL(blob);
+      e.currentTarget.download = 'civicniche.csv';
+    });
+  </script>
+</Base>

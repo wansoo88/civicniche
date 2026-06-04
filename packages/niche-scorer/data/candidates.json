@@ -1,0 +1,474 @@
+{
+  "_comment": "niche-discovery 워크플로우(26후보 적대적검증) 산출. score.mjs가 자동 우선 사용.",
+  "_generated": "2026-06-01",
+  "candidates": [
+    {
+      "name": "반려동물 장례식장(동물장묘업) 합법 등록 디렉터리 — 화장/건조/수분해 방식별, 비용대 정리",
+      "market": "-",
+      "scores": {
+        "searchDemand": 4,
+        "cpcCommercialIntent": 5,
+        "publicDataOnlyFactDensity": 2,
+        "incumbentSaturation": 2,
+        "licenseLegality": 5,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "marginal",
+      "_redFlags": [
+        "미점령 가설이 과장됨: 공식 e동물장례정보포털(eanimal.kr)이 이미 지역별 롱테일 리스트 페이지(예: /list_yeongnam), 비용 페이지(/info_price), 방식 페이지(/info_disposal), 합법·불법 기준 페이지(/info_legal)를 모두 보유하고 거의 모든 질의에서 SEO 상위 점유. 후보가 '미점령'이라 주장한 지역별 페이지가 실제로는 이미 존재함.",
+        "핵심 해자(방식×비용 정제)가 공공데이터로 채워지지 않음: LOCALDATA/공공데이터포털은 사업장명·주소·영업상태·좌표·허가방식만 제공하고 '가격'은 미포함. 모든 출처가 '정확한 비용은 각 장례식장에 직접 문의'라고 명시. 즉 차별화 핵심인 가격·방식별 요금은 수작업 수집해야 하며 '공공데이터 정제로만'은 불가능 → publicDataOnlyFactDensity 낮음."
+      ]
+    },
+    {
+      "name": "합법 등록 농어촌민박 디렉터리 — 신고번호·객실수·소재지로 '진짜 등록된 민박' 검증",
+      "market": "-",
+      "scores": {
+        "searchDemand": 2,
+        "cpcCommercialIntent": 2,
+        "publicDataOnlyFactDensity": 4,
+        "incumbentSaturation": 1,
+        "licenseLegality": 5,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "치명적 미점령 실패: 한국관광공사 '세이프스테이(safestay.visitkorea.or.kr)'가 바로 이 후보가 '비어있다'고 주장한 '합법·안전 민박 검증' 축을 이미 점령. 동일한 LOCALDATA를 출처로, 지역별 검색·인허가일·영업상태 제공, 정부가 캠페인(2023~2025 보도, 인스타그램)으로 적극 홍보 중. unoccupiedThesis가 사실과 정면 충돌.",
+        "검색수요가 정부 캠페인으로 '만들어진' 수요이지 자생적 롱테일 검색 풀이 아님. SERP는 신고절차·정부24 양식 등 정보성/내비게이션 질의가 지배. '예약' 의도는 여기어때/야놀자가 완전 장악 — 좁힌 '합법성' 축은 유기 검색량이 얇음."
+      ]
+    },
+    {
+      "name": "장기요양기관 디렉터리 — 요양원/주야간보호/방문요양 평가등급·정원·본인부담 정제",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 4,
+        "publicDataOnlyFactDensity": 3,
+        "incumbentSaturation": 1,
+        "licenseLegality": 4,
+        "affiliateExists": 3,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "미점령 가설이 사실상 허위. 또하나의가족(ddoga.co.kr, GC녹십자/헥톤프로젝트 자본)이 이미 전국 약 4만개 시설을 '지역+평가등급+시설규모+전문분야+설립연도+프로그램' 필터로 검색 제공 — 후보가 '비어있다'고 주장한 바로 그 멀티속성 디렉터리를 정확히 점령 중(https://ddoga.co.kr/ltch-find).",
+        "정부도 이미 점령: 소비자24(consumer.go.kr)가 시설별 '장기요양기관 평가' 개별 페이지를 SEO 색인 형태로 발행(예: /user/ftc/consumer/crtfc/1045/...). 공식 longtermcare.or.kr 검색도 A~E 등급을 지역/급여종류/명칭별로 이미 노출."
+      ]
+    },
+    {
+      "name": "반려동물 동반 가능 시설 디렉터리 — 카페/식당/관광지 동반조건·크기제한 정제(전국)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 2,
+        "publicDataOnlyFactDensity": 2,
+        "incumbentSaturation": 1,
+        "licenseLegality": 5,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "미점령 가설(unoccupiedThesis) 사실상 반증됨: 어디가개(dogswhere), 와요/WAYO(15,000+ 장소, 대형견/놀이터 필터), 위드펫, 반려생활(대형견/독채/운동장 필터) 등 다수 인큐번트가 '대형견/실내/노케이지(오프리쉬)/동반조건' 필터를 이미 핵심 셀링포인트로 제공. 후보가 주장하는 차별축이 비어있지 않음.",
+        "네이버 지도 공식 '강아지도(갈수있어 강아지도)' 서비스가 일반 검색을 흡수 — 7일 페이지뷰 120만 건. 대형 포털이 일반 의도를 이미 점령."
+      ]
+    },
+    {
+      "name": "동물 판매·생산·전시업 등록 디렉터리 — 합법 등록 펫숍/브리더 검증",
+      "market": "-",
+      "scores": {
+        "searchDemand": 2,
+        "cpcCommercialIntent": 3,
+        "publicDataOnlyFactDensity": 3,
+        "incumbentSaturation": 1,
+        "licenseLegality": 5,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "치명적 미점령 가설 붕괴: 정부 공식 사이트 animal.go.kr(국가동물보호정보시스템) '영업자 안내'가 이미 지역(시도/시군구)별·업종별(판매/생산/전시/위탁) 검색을 제공하며 업소명·등록번호·주소·영업상태를 표시하고, 지자체 인허가에서 매일 동기화 + 엑셀 다운로드 + 지도(위경도)까지 지원. 5,816 위탁/1,954 판매 등록. '합법 등록 여부 확인'이라는 사실축은 권위 있는 원천이 이미 점령. 미점령 주장은 사실과 다름.",
+        "검색수요가 정성적 신호에 의존: 강아지공장 이슈로 사회적 관심은 있으나 실검색은 거래형('강아지 분양 추천/후기/가격')에 쏠림. '합법 등록번호 확인' 롱테일은 정보형·저빈도로 추정, 정확 검색량 미확인."
+      ]
+    },
+    {
+      "name": "환경 측정대행업체(대기·수질·소음진동·실내공기질·악취) 분야별·지역별 디렉터리",
+      "market": "-",
+      "scores": {
+        "searchDemand": 2,
+        "cpcCommercialIntent": 3,
+        "publicDataOnlyFactDensity": 2,
+        "incumbentSaturation": 1,
+        "licenseLegality": 4,
+        "affiliateExists": 2,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "미점령 가설 붕괴: 공식 환경측정분석 정보관리시스템(측정대행업체조회.kr)이 이미 지역(시도+구군)x측정분야(대기/수질/소음진동/실내공기질/악취)x측정항목 필터 검색 + 업체 상세(연락처/주소/측정항목/용역이행능력평가/홈페이지/브로슈어)를 제공. 후보가 만들겠다는 디렉터리가 공식 사이트에 거의 완성형으로 선점됨",
+        "다중 선점자 중복: 경기데이터드림(대기/환경 측정대행 현황 데이터셋), LOCALDATA(지방행정인허가 측정대행업소 개방), 환경부 정책자료실 PDF가 각각 별도로 동일 데이터를 이미 게시 중 -> 신규 디렉터리의 추가 가치 희박"
+      ]
+    },
+    {
+      "name": "석면조사기관·석면해체제거업체 지역별 디렉터리(슬레이트/텍스/밤라이트 철거)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 4,
+        "cpcCommercialIntent": 4,
+        "publicDataOnlyFactDensity": 3,
+        "incumbentSaturation": 2,
+        "licenseLegality": 5,
+        "affiliateExists": 2,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "marginal",
+      "_redFlags": [
+        "미점령 주장 약화: 고용노동부가 석면조사기관·해체제거업자 등록현황을 공식 게시하고, 환경부 석면관리 종합정보망(asbestos.me.go.kr)이 지도 기반 '주변 석면건축물 찾기' 등 검색을 이미 제공한다. 정부 1차 출처가 핵심 질의를 부분적으로 이미 충족.",
+        "트랜잭션 키워드(석면철거 견적/비용/추천)는 클링온·미소·숨고 등 대형 철거 견적 비교 플랫폼이 이미 점령. 리드 가치가 높은 상업 질의는 incumbent가 흡수 중이라 SEO 진입장벽 존재."
+      ]
+    },
+    {
+      "name": "소방시설업체(소방시설관리업·공사업·설계업·감리업·방염업) 지역별 등록현황 디렉터리",
+      "market": "-",
+      "scores": {
+        "searchDemand": 2,
+        "cpcCommercialIntent": 3,
+        "publicDataOnlyFactDensity": 2,
+        "incumbentSaturation": 1,
+        "licenseLegality": 4,
+        "affiliateExists": 2,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "핵심 '통합 디렉터리 부재' 테제 반증됨: 한국소방시설협회 소방정보알리미(feia.ekffa.or.kr/compSearch)가 이미 전국 통합 검색을 제공 — 상호·대표자·지역·업종으로 조회하고 대표자명·주소·전화번호·등록업종을 반환. 즉 공식기관이 이미 전국 디렉터리를 운영 중이라 '해자'가 성립하지 않음.",
+        "소방청 소방시설업 등록시스템(freg.ekffa.or.kr), 한국소방시설협회 공시업체조회(fsale.ekffa.or.kr), 관리업종합정보시스템(fpsm.kfma.kr) 등 공식 조회 채널 다수 — 미점령(incumbentSaturation)이 사실상 점령 상태."
+      ]
+    },
+    {
+      "name": "자동차 종합검사 지정정비사업장(민간검사소) 검사항목·지역별 디렉터리",
+      "market": "-",
+      "scores": {
+        "searchDemand": 2,
+        "cpcCommercialIntent": 3,
+        "publicDataOnlyFactDensity": 3,
+        "incumbentSaturation": 1,
+        "licenseLegality": 4,
+        "affiliateExists": 3,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "치명적 미점령 가설 붕괴: 제안서가 '블루오션'이라 주장한 차별화 각도(대형차/이륜차/종합검사 가능 필터)를 공식 사이버검사소(cyberts.kr)가 이미 네이티브로 제공함. 실측 확인 결과 cyberts.kr 민간검사소 조회는 차종별(자동차/이륜차/전체종합)·검사유형별(종합(대형가능), 종합(질소산화물검사가능), 종합(대형+질소산화물), 전기자동차검사가능, 고전원배터리정밀검사가능)·지역별 필터를 그대로 제공. 즉 제안한 해자가 정부 무료 권위 도구로 이미 완전 점령됨.",
+        "검색수요 실재성 약함: 롱테일 질의가 모두 정부24·KOTSA·car365·나무위키·카드사 페이지로 즉시 해소됨. '종합검사 가능 검사소 후기' 류의 독립 블로그/콘텐츠 생태계 부재 → 차별화 롱테일의 독립 검색량이 얇음."
+      ]
+    },
+    {
+      "name": "어린이놀이시설 안전검사기관·시설별 검사이력 디렉터리(설치/정기검사·합부판정)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 2,
+        "cpcCommercialIntent": 2,
+        "publicDataOnlyFactDensity": 4,
+        "incumbentSaturation": 1,
+        "licenseLegality": 4,
+        "affiliateExists": 1,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "치명적: safeplayground.kr(안전한놀이터)가 후보가 제안한 설계를 그대로 선점함 — 동일 데이터소스(행안부 OpenAPI 15124524), 17개 시도별 + 6개 시설유형별(아파트/공원/키즈카페/학교/어린이집/유치원) 정적 디렉터리, /facility/ 시설별 상세페이지, 합격/기간만료/불합격/미검사 구분(만료알림 각도 포함)까지 100% 중복",
+        "두번째 인커번트: CPS(cps.kstar.or.kr / cps.or.kr)도 동일 공공데이터포털 데이터를 지역·설치장소별로 추출 제공 → 미점령 가설은 실증적으로 반증됨"
+      ]
+    },
+    {
+      "name": "FDA-registered medical device contract manufacturers, browsable by product code / device type (B2B sourcing directory)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 5,
+        "publicDataOnlyFactDensity": 4,
+        "incumbentSaturation": 2,
+        "licenseLegality": 5,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 4
+      },
+      "_verdict": "marginal",
+      "_redFlags": [
+        "치명적 미점령 의문: FDA 공식 검색툴(accessdata.fda.gov/scripts/cdrh/cfdocs/cfrl)이 이미 product code, device name, 설립 활동(activity) 필터로 무료 검색 가능. 핵심 질의('이 제품코드 등록 제조소 누구')를 공식 소스가 직접 답함 → unoccupiedThesis가 '디렉터리 부재'를 과장. 실제 미점령 영역은 SEO친화 browsable 페이지/UX/export일 뿐, 데이터 자체는 점령됨.",
+        "후보 주장 '제품코드 ~6,000+개'는 부분적으로만 사실 — 제네릭 디바이스 타입은 ~1,700개. 제품코드 수가 수천 개여도 대부분 롱테일 페이지는 직접 검색량 사실상 0 → 대량 자동생성 = 씬콘텐츠/도어웨이 페이지로 구글 SEO 페널티 리스크."
+      ]
+    },
+    {
+      "name": "주(州)별 면허 석면 제거(abatement) 업체 전국 통합 디렉터리",
+      "market": "-",
+      "scores": {
+        "searchDemand": 5,
+        "cpcCommercialIntent": 5,
+        "publicDataOnlyFactDensity": 3,
+        "incumbentSaturation": 1,
+        "licenseLegality": 3,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "미점령 명제(unoccupied thesis)가 검증 결과 사실상 거짓: AbatementFinder.com이 이미 50개 주+DC에 걸쳐 7,702건의 면허 업체 레코드를 보유. 푸터에 '주 면허 기록 + 로컬 비즈니스 프로필 enrichment로 구성'이라 명시 — 후보가 제안한 해자(전국 통합·정규화·면허검증)를 이미 구현. URL 구조도 /state/XX -> city -> contractor로 후보 제안과 동일, 색인 완료 상태.",
+        "후보가 '단일·얇음'이라 평가절하한 인컴번트가 실제로는 후보 기획안 그 자체임 — 차별화 여지가 거의 없고 선행자가 Google 리뷰까지 enrichment해 사실밀도 우위마저 약함."
+      ]
+    },
+    {
+      "name": "EPA Lead-Safe(RRP) 인증 리노베이션·페인팅 업체 디렉터리(1978년 이전 주택 대상)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 4,
+        "publicDataOnlyFactDensity": 2,
+        "incumbentSaturation": 1,
+        "licenseLegality": 3,
+        "affiliateExists": 3,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "미점령 가설 허위: leadsafelist.com이 5만+ firm을 주→시 단위 페이지(예: /contractor/pennsylvania/philadelphia/, /contractor/georgia-1/augusta/)로 이미 망라, NY만 687페이지 페이지네이션으로 색인됨. getleadsafe.com까지 제2 인컴번트 존재. 후보가 제안한 '도시별 디렉터리' 모델은 이미 구축·색인 완료된 상태",
+        "공공데이터 고유 사실 밀도 빈약: 한 firm당 정제 가능한 고유 사실은 사실상 상호·소재지·인증유효기간 정도. 인컴번트 리스팅도 이름+도시 수준이라 '한 페이지를 공공데이터로만 채워 해자 형성'이 어려움. 5년 유효라 갱신 사실조차 희박"
+      ]
+    },
+    {
+      "name": "TTB 면허 크래프트 증류소(distillery) 전국 디렉터리(시음실·투어 안내 포함)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 4,
+        "cpcCommercialIntent": 3,
+        "publicDataOnlyFactDensity": 2,
+        "incumbentSaturation": 1,
+        "licenseLegality": 5,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "치명적 미점령도 붕괴: distillerytrail.com이 이미 2,294개 증류소를 보유하고 이름/주(州)/스피릿/편의시설 검색 + 지도 기능까지 제공. ACSA 2025 기준 미국 활성 크래프트 증류소가 약 2,282개인데 인컴번트가 그보다 많은 2,294개를 등재 = 사실상 100% 망라. 즉 후보의 핵심 차별점('전국 모든 면허 증류소 망라')을 인컴번트가 이미 달성. incumbentSaturation=1.",
+        "공공데이터 고유사실(해자)이 소비자 수요와 불일치: 검색자가 원하는 핫 필드(시음실 영업시간, 투어 가격, 예약)는 TTB 공개데이터에 없음. 공공데이터로만 채울 수 있는 고유사실은 허가번호·허가유형·상호·주소뿐인데, DSP 허가번호는 소비자에게 트리비아 수준의 저관심 정보. 즉 '공공데이터 해자'가 곧 '소비자가 안 찾는 정보'라는 구조적 모순. publicDataOnlyFactDensity=2."
+      ]
+    },
+    {
+      "name": "USDA 유기농(NOP) 인증 원료·핸들러/가공업체 B2B 소싱 디렉터리(원료 카테고리별)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 2,
+        "cpcCommercialIntent": 3,
+        "publicDataOnlyFactDensity": 3,
+        "incumbentSaturation": 1,
+        "licenseLegality": 5,
+        "affiliateExists": 2,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "미점령 논제가 사실과 충돌: USDA INTEGRITY DB 자체가 무료·공개·검색가능(인증기관/scope/product/status 필터)이고 풀데이터 다운로드까지 제공 — '대형 무료 디렉터리 부재' 주장은 거짓에 가까움",
+        "'원료 카테고리별' 핵심 차별점을 OMRI가 이미 무료로 점령: 10,000+ 제품을 Crop/Livestock/Processing 카테고리로 검색, 매일 갱신. 후보의 월 1회 갱신보다 신선도·범위 모두 열세"
+      ]
+    },
+    {
+      "name": "미국 수입/내국 FDA 등록 의약품·API 제조소(DECRS) B2B 소싱·검증 디렉터리",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 4,
+        "publicDataOnlyFactDensity": 3,
+        "incumbentSaturation": 1,
+        "licenseLegality": 3,
+        "affiliateExists": 2,
+        "dataSaleDemandSignal": 3
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "미점령도 붕괴(가장 치명적): FDA 본체가 이미 무료 공개 검색사이트 dps.fda.gov/decrs, GMP 시설 리스트(3,652개 시설/36개국), NDC Directory, FEI Portal로 1차 답을 직접 제공. 구글이 이 공식 소스를 최우선 노출.",
+        "상업 incumbent 포화: PharmaCompass(find-suppliers + US DMF DB), fdalisting, fdabasics, fdahelp.us, willowglenfda, libertymanagement, fortunachem 등 다수가 'FDA registration number search'/'API manufacturer' SEO를 이미 장악."
+      ]
+    },
+    {
+      "name": "한국 무장애(배리어프리) 관광지·시설 디렉터리 — POI별 휠체어 접근성 속성 페이지 (KR+영문 수출)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 3,
+        "publicDataOnlyFactDensity": 4,
+        "incumbentSaturation": 1,
+        "licenseLegality": 3,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 2
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "치명적 인커번트: KTO/문체부가 직접 운영하는 access.visitkorea.or.kr(열린관광 모두의 여행)이 후보 제안과 거의 동일하게 5개 유형 25가지 무장애 편의정보(휠체어 회전 가능 화장실, 경사로 폭/손잡이, 점자블록, 장애인 주차, 엘리베이터)로 명소·음식점·숙박 POI를 필터 검색 제공. 한국어 시장은 사실상 점령됨. unoccupiedThesis('디렉터리형 인커번트 부재')는 검증 결과 거짓.",
+        "영문 수출 각도도 미점령 아님: english.visitkorea.or.kr, english.visitseoul.net/accessibility, 서울다누림관광 영문, WheelchairTravel.org(Seoul 전용 가이드), Wheelmap(한국어 지원+한국 POI 존재), Wheel the World 등 다수 인커번트가 영문 접근성 콘텐츠를 이미 제공."
+      ]
+    },
+    {
+      "name": "한국 캠핑장·야영장 시설 사실 디렉터리 — 사이트별 편의/안전시설 속성 페이지 (고캠핑 기반)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 4,
+        "publicDataOnlyFactDensity": 2,
+        "incumbentSaturation": 1,
+        "licenseLegality": 5,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 1
+      },
+      "_verdict": "marginal",
+      "_redFlags": [
+        "미점령 가설 붕괴: 공식 고캠핑 포털이 이미 화장실/샤워실/전기 등 시설 필터 검색을 제공하고, 캠핏(국내 1위)·땡큐캠핑·캠핑톡(시설/테마/자연환경 조건 검색 명시)·5gcamp(무료/오지 캠핑 좌표 지도)·댕댕캠핑(애견동반 디렉터리, 경기만 89곳)·gptour.go.kr 등 다수 인큐번트가 '시설조건+지역' 롱테일을 이미 점령. incumbentSaturation 1점.",
+        "사실밀도 약함: 공공데이터 시설필드는 화장실/샤워실/개수대/소화기/방화수 등 거친 boolean 플래그 수준. 예시 질의가 가정하는 '온수 샤워실', '반려동물 동반(견종/크기)', '전기 사용 가능'은 정형 데이터에 신뢰성 있게 들어있지 않음(고캠핑 상세조차 '세부 편의시설 항목 비정형'). 한 페이지 고유 사실밀도가 얕아 해자 미약."
+      ]
+    },
+    {
+      "name": "글로벌 공공 자전거 정비소·무료 펌프 스테이션 디렉터리 (amenity=bicycle_repair_station)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 1,
+        "publicDataOnlyFactDensity": 2,
+        "incumbentSaturation": 1,
+        "licenseLegality": 3,
+        "affiliateExists": 2,
+        "dataSaleDemandSignal": 1
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "치명적 포화: Bike-Pump.com이 제안된 차별화(도시별 SEO 페이지 /san-francisco, 스테이션 타입, Presta/Schrader 밸브 호환, 24/7 여부)를 이미 그대로 출시 운영 중. FreeAirPump.com, Cyclofix, Dero Fixit Map, Cyclehoop, Google Play 전용 앱까지 다수 존재. 후보가 주장한 '약한 인커번트'는 사실과 다름 — 핵심 차별화는 이미 점령됨",
+        "Google 지도가 핵심 'near me' 질의를 직접 답함: 'bike pump station'/'bicycle repair station' 검색 시 Maps가 결과 직접 표시 → 디렉터리 사이트의 우회 가치 낮음"
+      ]
+    },
+    {
+      "name": "한국 전국 무료 공공와이파이 위치 디렉터리 — 동/건물 단위 사실 페이지 (표준데이터)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 2,
+        "cpcCommercialIntent": 1,
+        "publicDataOnlyFactDensity": 1,
+        "incumbentSaturation": 1,
+        "licenseLegality": 4,
+        "affiliateExists": 3,
+        "dataSaleDemandSignal": 1
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "미점령 가설이 사실상 거짓: 정부 공식 wififree.kr이 이미 동일 기능(시도/시군구 검색 + 장소명 검색 + 지도 + 로드뷰 + 길찾기 + 한/영 UI)을 제공. NIA 공식 앱(iOS/Android/원스토어), 스마트서울맵까지 정부가 직접 점령",
+        "크라우드소싱 글로벌 앱이 이미 더 큰 커버리지로 점령: WiFi Map(서울 23K+ 스폿), FreeMap(전국 77K+ 검증 핫스팟, 광고無·계정無). 영문 관광객 시장도 선점됨"
+      ]
+    },
+    {
+      "name": "글로벌 무료 야외 운동기구·캘리스데닉스 파크 디렉터리 (leisure=fitness_station / sport=calisthenics)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 3,
+        "publicDataOnlyFactDensity": 2,
+        "incumbentSaturation": 1,
+        "licenseLegality": 4,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 1
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "핵심 '미점령' 가설이 반증됨: 후보가 빈틈이라 주장한 '도시x장비유형' 롱테일 페이지가 인커번트에 이미 존재. 실제 라이브 URL 확인 — calisthenics-parks.com/cities/27-en-london/equipments/2-en-parallel-bar-p-bar/spots (런던 평행봉), calisthenics-parks.com/cities/638-en-los-angeles/equipments/1-...-pull-up-bar (LA 철봉). 즉 '장비속성 차별화'라는 유일한 해자 논리가 무너짐.",
+        "카테고리 자체가 포화: streetworkoutlist.com(18,341개 파크/7,501개 도시/129개국), Park Atlas/Caliverse/Calisthenics Parks 모바일앱, calisthenicslivemap.com, outdoorgymsdirectory.com 등 다수 디렉터리+앱 난립."
+      ]
+    },
+    {
+      "name": "한국 KC/전파 적합성평가(인증) 디렉터리 — RRA 적합성평가 DB 기반",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 4,
+        "publicDataOnlyFactDensity": 3,
+        "incumbentSaturation": 3,
+        "licenseLegality": 4,
+        "affiliateExists": 4,
+        "dataSaleDemandSignal": 3
+      },
+      "_verdict": "promising",
+      "_redFlags": [
+        "오픈API가 'LINK 타입'으로 명시됨 — 전체 레코드 벌크 다운로드/인덱싱이 아니라 원천 RRA 조회시스템으로 위임하는 링크형일 수 있음. 이 경우 자체 SEO 디렉터리에 필요한 전건 코퍼스 확보가 어려워 모델 단위 인덱싱 가능성에 직접적 리스크. data.go.kr의 'fileData'(다운로드형)나 전건 적재 가능 여부를 등재 전 반드시 확인해야 함.",
+        "정부 공식 조회폼이 이미 다수 존재(rra.go.kr A_c_search, ccac.rra.go.kr 영문, safetykorea.kr, consumer.go.kr 소비자24). 즉 '답'은 이미 공개되어 있고 부재한 것은 SEO 인덱싱뿐. 사용자가 정부 폼에서 직접 조회하는 행동을 대체할 만큼의 편의·집계 가치를 못 만들면 트래픽이 정부 사이트로 흡수될 위험."
+      ]
+    },
+    {
+      "name": "EUDAMED 의료기기 디렉터리 — UDI·EMDN 분류·인증서·경제운영자 통합검색 (글로벌 medtech 규제)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 4,
+        "publicDataOnlyFactDensity": 4,
+        "incumbentSaturation": 1,
+        "licenseLegality": 4,
+        "affiliateExists": 2,
+        "dataSaleDemandSignal": 4
+      },
+      "_verdict": "marginal",
+      "_redFlags": [
+        "미점령 가설 반증(최대 악재): search.eudamed.com이 이미 2,276,998건(2026-05-31)을 EU+US로 인덱싱하고 제조사/SRN/UDI/EMDN/상품명 검색 제공 중. '제3자 검색은 매우 얕다'는 후보 주장과 모순.",
+        "복수 라이브 경쟁자: OpenRegulatory beudamed.com(구글급 검색, 시장진입 촉진 목적 명시), eudamed.com(M2M·위조모니터링), EirMed(인증 리포트, SRN당 €89), EudaMed Scan 앱, RIM/규제인텔리전스 SaaS. 0일차 그린필드가 아니라 이미 경쟁 중인 시장."
+      ]
+    },
+    {
+      "name": "NANDO Notified Body × Harmonized Standard 매퍼 — '내 제품 지침에 맞는 EN 표준·인증기관' 디렉터리 (CE 마킹)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 3,
+        "cpcCommercialIntent": 4,
+        "publicDataOnlyFactDensity": 4,
+        "incumbentSaturation": 1,
+        "licenseLegality": 5,
+        "affiliateExists": 1,
+        "dataSaleDemandSignal": 3
+      },
+      "_verdict": "marginal",
+      "_redFlags": [
+        "미점령 논지가 실증에서 무너짐: 공식 NANDO DB 자체가 'search by legislation'(지침별 검색)을 이미 제공하고, EU single-market 공식 포털이 지침별 harmonised standards 목록을 이미 게재. 후보가 주장하는 '지침→표준→인증기관' 매핑은 공식 1차 소스가 이미 답하고 있어 구글/공식포털이 상위 점령.",
+        "cross-directive 매퍼 부재 주장이 거짓에 가까움: euverify.com이 이미 '제품 카테고리 선택→해당 지침·harmonised standards 자동 교차참조' 도구를 운영(기계·EMC·RED·LVD 포괄 주장). european-standards.com은 OJEU/EUR-Lex/ETSI를 가로지르는 AI 표준 로케이터 + 직접 PDF 제공. ce-marking.help(표준 검색엔진), compliancegate.com, cemarking.net, ce-marking.org가 인증기관·표준을 두텁게 커버. 사실상 레드오션."
+      ]
+    },
+    {
+      "name": "EU TED 공공조달 디렉터리 — eForms 기반 발주기관·CPV·낙찰자 정제(국가·CPV 슬라이스)",
+      "market": "-",
+      "scores": {
+        "searchDemand": 2,
+        "cpcCommercialIntent": 4,
+        "publicDataOnlyFactDensity": 4,
+        "incumbentSaturation": 1,
+        "licenseLegality": 5,
+        "affiliateExists": 2,
+        "dataSaleDemandSignal": 4
+      },
+      "_verdict": "reject",
+      "_redFlags": [
+        "미점령 명제 붕괴: TED 본체가 이미 국가×CPV×발주기관×낙찰자 필터 검색을 무료로 제공. 2024년 9월 EU 공식 무료 'Public Procurement Data Space(PPDS)' 출범 — 14개 분석 대시보드로 국가 포털까지 연방화. 정부가 직접 만든 무료 경쟁자가 핵심 차별화를 선점.",
+        "상업 인커번트 과포화: TenderMetric, Stotles, Tussell, TenderWolf, Reyda, TenderAlerts, Hermix 등 AI 기반 조달 인텔리전스 SaaS가 이미 CPV별 낙찰자 랭킹·바이어 인텔리전스 제공. Apify에만 10개 이상 TED 스크레이퍼가 winner intelligence 판매 중."
+      ]
+    },
+    {
+      "name": "한국 국방·공공 조달 규격/낙찰 디렉터리 — 국방규격(KDS)·군수품조달 D2B Open API 기반",
+      "market": "-",
+      "scores": {
+        "searchDemand": 2,
+        "cpcCommercialIntent": 3,
+        "publicDataOnlyFactDensity": 3,
+        "incumbentSaturation": 2,
+        "licenseLegality": 3,
+        "affiliateExists": 1,
+        "dataSaleDemandSignal": 3
+      },
+      "_verdict": "marginal",
+      "_redFlags": [
+        "미점령 가설 반증: g2bplus.kr·g2bmarket.com·모두입찰·비드폼 등 나라장터/D2B 입찰·낙찰 데이터를 BigData/AI로 집계·검색·분석 제공하는 상용 incumbent가 이미 다수 존재(일부 무료). '제3자 디렉터리 전무'는 일반 조달 영역에서 사실상 반증됨 — 국방규격번호 단위 SEO 슬라이스만 상대적 공백.",
+        "라이선스 핵심 함정: 해자라고 주장한 '국방규격 사실밀도'의 본체인 규격 원문/도면/품질보증요구서(QAR)는 군사기밀·보안 사유로 KDSIS 열람·제공 신청·통제 대상이며 상업적 재배포 불가. 공개되는 건 규격번호/명칭 수준 메타데이터(data.go.kr 15089081)뿐 — 실제로 페이지를 채울 고유 본문은 제공 불가."
+      ]
+    }
+  ]
+}

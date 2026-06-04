@@ -1,0 +1,35 @@
+{
+  "_comment": "SAMPLE 데이터 — 점수는 예시 추정값입니다. niche-discovery 워크플로우 결과(검증·실측 점수)를 candidates.json 으로 저장하면 score.mjs가 그쪽을 우선 사용합니다. 각 dim은 0~5.",
+  "candidates": [
+    {
+      "name": "전기차 충전소(지역별·커넥터별·요금)",
+      "market": "both",
+      "scores": { "searchDemand": 4, "cpcCommercialIntent": 3, "publicDataOnlyFactDensity": 4, "incumbentSaturation": 2, "licenseLegality": 4, "affiliateExists": 2, "dataSaleDemandSignal": 3 },
+      "notes": "공공데이터+OSM 풍부하나 대형 앱(티맵/PlugShare)이 일부 점령 → 미점령도 낮음"
+    },
+    {
+      "name": "반려동물 화장·장묘시설(지역별·요금·예약)",
+      "market": "KR",
+      "scores": { "searchDemand": 3, "cpcCommercialIntent": 4, "publicDataOnlyFactDensity": 4, "incumbentSaturation": 4, "licenseLegality": 4, "affiliateExists": 2, "dataSaleDemandSignal": 1 },
+      "notes": "감정 소비+공공 인허가 등록부. 대형 디렉터리 부재. 상업의도 높음"
+    },
+    {
+      "name": "낚시터·유료낚시장(어종·요금·편의시설)",
+      "market": "KR",
+      "scores": { "searchDemand": 3, "cpcCommercialIntent": 2, "publicDataOnlyFactDensity": 3, "incumbentSaturation": 4, "licenseLegality": 4, "affiliateExists": 2, "dataSaleDemandSignal": 1 },
+      "notes": "공공데이터 등록부 존재, 점령 낮음. 상업의도·제휴는 약함"
+    },
+    {
+      "name": "특정 면허업 등록부 크롤링(예시 — ToS 위반 가정)",
+      "market": "global-EN",
+      "scores": { "searchDemand": 4, "cpcCommercialIntent": 4, "publicDataOnlyFactDensity": 3, "incumbentSaturation": 3, "licenseLegality": 1, "affiliateExists": 2, "dataSaleDemandSignal": 3 },
+      "notes": "게이트 데모용: 재배포 적법성 1 → 점수 무관하게 ⛔ 탈락되어야 정상"
+    },
+    {
+      "name": "범용 비즈니스 디렉터리(전 업종)",
+      "market": "both",
+      "scores": { "searchDemand": 5, "cpcCommercialIntent": 4, "publicDataOnlyFactDensity": 1, "incumbentSaturation": 0, "licenseLegality": 3, "affiliateExists": 3, "dataSaleDemandSignal": 2 },
+      "notes": "게이트 데모용: 미점령도 0(구글/옐프 완전점령) → ⛔ 탈락. 검색수요만 보고 들어가면 죽는 전형"
+    }
+  ]
+}

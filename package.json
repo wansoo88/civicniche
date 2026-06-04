@@ -1,0 +1,23 @@
+{
+  "name": "civicniche",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "공공데이터 기반 데이터-차별형 디렉터리 (저자본·무인 근접 스캐폴드)",
+  "engines": {
+    "node": ">=18"
+  },
+  "workspaces": [
+    "packages/site"
+  ],
+  "scripts": {
+    "init": "node scripts/init.mjs",
+    "score": "node packages/niche-scorer/score.mjs",
+    "prevalidate:cost": "node packages/prevalidation/13b-llm-cost/measure.mjs",
+    "pipeline": "node packages/data-pipeline/pipeline.mjs --niche=sample",
+    "build:trigger": "node scripts/build-trigger.mjs",
+    "site:dev": "npm --workspace packages/site run dev",
+    "site:build": "npm --workspace packages/site run build"
+  },
+  "license": "UNLICENSED"
+}

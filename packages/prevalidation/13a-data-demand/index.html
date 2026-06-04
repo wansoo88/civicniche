@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- §13-A 데이터 직판 수요 선검증 랜딩. Cloudflare Worker(collector/)에 배선.
+     COLLECTOR_URL을 배포한 Worker 주소로 바꾸면 실제 수집됩니다. 비우면 localStorage 데모. -->
+<title>정제 규제·인증 데이터셋 — 사전 수요 검증</title>
+<style>
+  :root{--fg:#16181d;--mut:#6b7280;--acc:#2563eb;--card:#f7f8fa;--line:#e8ebef;--ok:#16a34a}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo",Roboto,sans-serif;color:var(--fg);line-height:1.65;background:#fff}
+  .wrap{max-width:780px;margin:0 auto;padding:44px 20px 80px}
+  .badge{display:inline-block;background:#fef3c7;color:#92400e;font-size:12px;font-weight:700;padding:4px 11px;border-radius:999px}
+  h1{font-size:30px;line-height:1.3;margin:14px 0 8px}
+  .sub{color:var(--mut);font-size:17px;margin-bottom:26px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:14px 0}
+  .product{border:1.5px solid var(--line)}
+  .product.sel{border-color:var(--acc);box-shadow:0 0 0 3px #2563eb22}
+  h2{font-size:18px;margin-bottom:4px}
+  .price{font-weight:700;color:var(--acc)}
+  pre{background:#0f172a;color:#cbd5e1;border-radius:9px;padding:12px;overflow:auto;font-size:11.5px;line-height:1.5;margin-top:10px}
+  label{display:block;font-weight:600;margin:12px 0 5px;font-size:14px}
+  input,select,textarea{width:100%;padding:10px 12px;border:1px solid #d4d8de;border-radius:8px;font-size:15px;font-family:inherit}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:560px){.row{grid-template-columns:1fr}}
+  .btns{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+  button{cursor:pointer;border:0;border-radius:9px;padding:12px 18px;font-size:15px;font-weight:600}
+  .primary{background:var(--acc);color:#fff}.ghost{background:#fff;border:1px solid #d4d8de}
+  .ok{color:var(--ok);font-weight:600;display:none;margin-top:12px}
+  .mut{color:var(--mut);font-size:13px}
+  .demo{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;font-size:13px;padding:10px 12px;border-radius:9px;margin-top:12px;display:none}
+  footer{color:var(--mut);font-size:12px;margin-top:30px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">사전 수요 검증 · 정식 출시 전</span>
+  <h1>정제·교차검증된 <span style="color:var(--acc)">규제·인증 데이터</span>를<br/>즉시 쓰는 CSV·API로</h1>
+  <p class="sub">정부 공개데이터를 정규화·중복제거·교차검증해 한 파일로. 직접 긁고 정제하는 수고를 없앱니다.</p>
+
+  <!-- 상품 A: FDA -->
+  <div class="card product" data-product="fda" id="p-fda">
+    <h2>① FDA 등록 의료기기 <b>계약제조사(Contract Manufacturer)</b> 데이터셋</h2>
+    <p class="mut">openFDA(미국 식약처, <b>CC0 퍼블릭도메인</b>) 기반. <b>약 65,000</b> 계약제조사 등록을 <b>중복제거·정규화·구조화</b>(업체당 1 정규 레코드) → 제품코드·디바이스명·510(k)·디바이스클래스·제조국·등록번호. 직접 페이지네이션·정제하는 수고를 없앱니다(openFDA는 skip 상한이 있어 전건 조립이 까다로움).</p>
+    <p style="margin-top:8px"><span class="price">스냅샷 $29 · 월구독 $49 · API $99</span> <span class="mut">— 전건 + 월 갱신 구독</span></p>
+    <pre>reg_no,name,state,country,product_codes,device_names,device_class
+3000170817,Acero Precision,PA,US,"KWQ; KWP; NKB","Appliance; Fixation; Spinal Intervertebral Body; ...",2
+3009631939,RED STAR CONTRACT MANUFACTURING INC.,IN,US,"JDR","Staple; Fixation; Bone",2</pre>
+    <p class="mut" style="margin-top:6px">구매 예상: 의료기기 소싱 에이전시 · 규제 컨설턴트 · 리드 브로커 · 데이터 개발자</p>
+  </div>
+
+  <!-- 상품 B: RRA -->
+  <div class="card product" data-product="rra" id="p-rra">
+    <h2>② 한국 KC/전파 <b>적합성평가(인증)</b> 데이터셋</h2>
+    <p class="mut">국립전파연구원(RRA) 적합성평가 공개데이터 기반. 인증번호·기자재명·제조자·제조국·인증종류·인증일. <b>관심도 측정 중</b> — data.go.kr 연동 후 제공 예정(현재는 수요 신호만 수집).</p>
+    <p style="margin-top:8px"><span class="price">스냅샷 $29 · 월구독 $49 · API $99</span></p>
+    <pre>cert_no,equipment_name,maker,country,cert_kind,cert_date
+R-C-XYZ-100,BLE 무선모듈 XYZ-100,Shenzhen ABC,중국,적합성평가,2024-03-11
+R-R-MZ7-7,산업용 Wi-Fi AP MZ-7,마루테크,대한민국,적합인증,2023-11-02</pre>
+    <p class="mut" style="margin-top:6px">구매 예상: 인증대행사 · 수입사 · 시험소 · 경쟁사 모니터링</p>
+  </div>
+
+  <div class="card">
+    <strong>관심 있으세요? 사전 의향을 남겨주세요</strong>
+    <p class="mut">결제하지 않습니다. 필요한 데이터·예산을 알려주시면 <b>샘플을 먼저</b> 보내드립니다.</p>
+    <form id="f">
+      <label>관심 데이터셋</label>
+      <select name="product" id="product">
+        <option value="fda">① FDA 의료기기 계약제조사</option>
+        <option value="rra">② 한국 KC/전파 인증</option>
+        <option value="both">둘 다</option>
+      </select>
+      <div class="row">
+        <div><label>이메일</label><input type="email" name="email" required placeholder="you@company.com" /></div>
+        <div><label>직군</label>
+          <select name="persona">
+            <option value="">선택</option>
+            <option>소싱/리드 에이전시</option>
+            <option>규제/인증 컨설턴트</option>
+            <option>수입사/제조사</option>
+            <option>개발자/연구자</option>
+            <option>기타</option>
+          </select>
+        </div>
+      </div>
+      <label>어떤 데이터가 필요하세요?</label>
+      <textarea name="need" rows="2" placeholder="예: 특정 제품코드 계약제조사 전체 + 510(k) 결합, 월 갱신"></textarea>
+      <label>적정 가격대</label>
+      <select name="willingness">
+        <option value="">선택</option>
+        <option value="lt29">$29 미만</option>
+        <option value="29">$29 (스냅샷)</option>
+        <option value="49">$49/월 (구독)</option>
+        <option value="99">$99/월 (API)</option>
+        <option value="gt99">$99 초과 가능</option>
+      </select>
+      <div class="btns">
+        <button type="submit" class="primary" data-intent="presale">💳 사전 구매 의향</button>
+        <button type="submit" class="ghost" data-intent="sample">📄 샘플 먼저 받기</button>
+      </div>
+      <div class="ok" id="ok">✅ 접수됐습니다. 곧 샘플을 보내드릴게요. (수요 신호로 기록됨)</div>
+    </form>
+    <div class="demo" id="demo">데모 모드: Worker 미설정 → 제출이 <code>localStorage</code>에 저장됩니다. 실제 수집은 <code>COLLECTOR_URL</code>을 채우세요.</div>
+  </div>
+
+  <footer>
+    §13-A 선검증. 통과 기준[사전 고정]: 샘플요청 5+ 또는 사전결제의향 1+ → GO. 의향 ≠ 결제(통과해도 '약한 양성').<br/>
+    발견은 사이트 트래픽이 아니라 데이터 마켓·개발자 커뮤니티·콜드아웃리치로(§7-b). 통과 후 본 빌드 착수.
+  </footer>
+</div>
+
+<script>
+  // 자체 호스팅 컬렉터(collector/server.mjs). 같은 도메인에 올리므로 상대경로 → CORS 불필요.
+  // 비우면 localStorage 데모. (구 Cloudflare Worker 예: "https://<worker>.workers.dev/submit")
+  const COLLECTOR_URL = "/submit";
+
+  const f = document.getElementById('f');
+  const ok = document.getElementById('ok');
+  const productSel = document.getElementById('product');
+  if (!COLLECTOR_URL) document.getElementById('demo').style.display = 'block';
+
+  // 상품 카드 하이라이트
+  function highlight(){
+    document.querySelectorAll('.product').forEach(c=>c.classList.remove('sel'));
+    const v = productSel.value;
+    if(v==='fda'||v==='both') document.getElementById('p-fda').classList.add('sel');
+    if(v==='rra'||v==='both') document.getElementById('p-rra').classList.add('sel');
+  }
+  productSel.addEventListener('change', highlight); highlight();
+  document.querySelectorAll('.product').forEach(c=>c.addEventListener('click',()=>{productSel.value=c.dataset.product;highlight();}));
+
+  let intent = 'presale';
+  f.querySelectorAll('button[type=submit]').forEach(b=>b.addEventListener('click',()=>{intent=b.dataset.intent;}));
+
+  f.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(f).entries());
+    data.intent = intent; data.ts = new Date().toISOString();
+    if (COLLECTOR_URL) {
+      try { await fetch(COLLECTOR_URL, {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)}); }
+      catch(err){ console.error(err); }
+    } else {
+      const s = JSON.parse(localStorage.getItem('civicniche_signals')||'[]');
+      s.push(data); localStorage.setItem('civicniche_signals', JSON.stringify(s));
+      console.log('[13-A signal]', data, `(누적 ${s.length}건)`);
+    }
+    ok.style.display='block'; f.reset(); highlight();
+  });
+</script>
+</body>
+</html>

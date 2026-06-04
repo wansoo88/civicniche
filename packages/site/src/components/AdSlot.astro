@@ -1,0 +1,18 @@
+---
+// 디스플레이 광고 슬롯(패시브 수익 ③). AdSense 설정 시 실제 광고, 미설정 시 자리표시자.
+import { ADS } from '../../monetization.config.mjs';
+const { adsenseClient, adsenseSlot } = ADS;
+const live = Boolean(adsenseClient && adsenseSlot);
+---
+{live ? (
+  <>
+    <ins class="adsbygoogle" style="display:block" data-ad-client={adsenseClient}
+         data-ad-slot={adsenseSlot} data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`} crossorigin="anonymous"></script>
+    <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </>
+) : (
+  <div style="border:1px dashed #cbd5e1;border-radius:10px;padding:18px;text-align:center;color:#94a3b8;font-size:13px;margin:14px 0">
+    광고 영역 · PUBLIC_ADSENSE_CLIENT / PUBLIC_ADSENSE_SLOT 설정 시 노출 (패시브 수익 ③)
+  </div>
+)}

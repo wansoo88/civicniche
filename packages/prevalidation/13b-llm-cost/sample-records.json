@@ -1,0 +1,13 @@
+{
+  "_comment": "정제 전 '지저분한' 원본 레코드 샘플. 실제 니치 데이터로 교체해 측정하세요. boundary=규칙만으로 정규화 애매해 LLM 호출이 필요한 케이스.",
+  "records": [
+    { "raw": "한국반려동물장례문화원 / 경기 광주시 곤지암읍 ... / 화장 가능, 24시 / ☎031-000-0000", "boundary": true },
+    { "raw": "펫포레스트  주소:경기도 처인구  반려동물 장묘 등록 제2020-3호 운영시간 09~20", "boundary": true },
+    { "raw": "무지개다리 펫 / 인천 / 메모리얼스톤 o / 픽업서비스", "boundary": true },
+    { "raw": "스카이펫 추모공원 강원 원주 화장+봉안 동물장묘업등록", "boundary": true },
+    { "raw": "name: Forever Friends Pet Aftercare; city: Busan; services: cremation, memorial; hours: 10-19", "boundary": false },
+    { "raw": "테스트 정상레코드 - 서울 / 동물장묘업 / 개인장 / 24시간", "boundary": true },
+    { "raw": "ABC 동물병원 (장묘 아님 - 오분류 후보)", "boundary": true },
+    { "raw": "그린펫 메모리얼 / 충북 청주 / 화장 / 분양 아님", "boundary": true }
+  ]
+}

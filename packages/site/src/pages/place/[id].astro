@@ -1,0 +1,91 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdSlot from '../../components/AdSlot.astro';
+import { loadRecords, NICHE_TITLE } from '../../lib/data.mjs';
+import { affiliateFor, DATA_SALE } from '../../../monetization.config.mjs';
+
+// "한 페이지 = 한 고유 질의"(§5). 색인 대상만 정적 생성.
+export function getStaticPaths() {
+  return loadRecords().map((r) => ({ params: { id: r.id }, props: { r } }));
+}
+const { r } = Astro.props;
+const site = Astro.site?.href?.replace(/\/$/, '') || '';
+const canonical = `${site}/place/${r.id}/`;
+const title = `${r.name} — ${r.region} ${NICHE_TITLE} | CivicNiche`;
+const description = `${r.name}(${r.region}) 영업시간·서비스·위치 정보. ${(r.attributes?.services || []).join(', ')}.`;
+
+// JSON-LD: 핵심 사실은 떠먹이지 않도록 요약 수준만(§5/R12 노출↔흡수 트레이드오프)
+const jsonld = {
+  '@context': 'https://schema.org', '@type': 'LocalBusiness',
+  name: r.name, address: r.address || undefined,
+  geo: r.lat && r.lng ? { '@type': 'GeoCoordinates', latitude: r.lat, longitude: r.lng } : undefined,
+  url: canonical,
+};
+const affLinks = affiliateFor(r); // 패시브 수익 ②: 문맥 제휴
+---
+<Base title={title} description={description} canonical={canonical} noindex={r.flags?.noindex}>
+  <p class="small"><a href="/">← 전체 {NICHE_TITLE}</a></p>
+  <h1>{r.name}</h1>
+  <div>{(r.attributes?.services || []).map((s) => <span class="pill">{s}</span>)}</div>
+  {r.flags?.crossValidated
+    ? <p class="small" style="color:#16a34a">✓ 2개 이상 출처에서 교차검증된 정보</p>
+    : <p class="small mut">단일 출처 정보 — 방문 전 확인 권장</p>}
+
+  <table>
+    <tbody>
+      <tr><td class="k">지역</td><td>{r.region || '-'}</td></tr>
+      <tr><td class="k">주소</td><td>{r.address || '-'}</td></tr>
+      <tr><td class="k">영업시간</td><td>{r.hours || '미상'}</td></tr>
+      {r.attributes?.reg_no && <tr><td class="k">등록번호</td><td>{r.attributes.reg_no}</td></tr>}
+      {r.lat && r.lng && <tr><td class="k">좌표</td><td>{r.lat}, {r.lng}</td></tr>}
+    </tbody>
+  </table>
+
+  {/* 패시브 수익 ②: 문맥 제휴 (고의도 — 저트래픽에도 작동) */}
+  {affLinks.length > 0 && (
+    <div class="card">
+      {affLinks.map((a) => (
+        <a href={a.url} rel="nofollow sponsored" style="display:inline-block;margin:4px 8px 4px 0;font-weight:600">
+          {a.label} ↗ <span class="small mut">({a.note})</span>
+        </a>
+      ))}
+    </div>
+  )}
+
+  {/* 패시브 수익 ③: 디스플레이 광고 */}
+  <AdSlot />
+
+  <div class="card small">
+    <strong>출처</strong>
+    <ul>
+      {(r.sources || []).map((s) => <li>{s.name} {s.license && `(${s.license})`} {s.url && <a href={s.url} rel="nofollow">↗</a>}</li>)}
+    </ul>
+  </div>
+
+  {/* 패시브 수익 ①: 정제 데이터 셀프판매 (트래픽 무관 핵심 수익원, §13-A 선검증 후 활성화) */}
+  {DATA_SALE.enabled && (
+    <div class="card">
+      <strong>📄 이 데이터, 통째로 필요하세요?</strong>
+      <p class="small mut">정제·교차검증된 전체 데이터를 CSV·API로. {DATA_SALE.tiers.map((t) => `${t.name} ${t.price}`).join(' · ')}</p>
+      <a href={DATA_SALE.checkoutUrl} rel="nofollow" style="font-weight:600">데이터셋 구매 ↗</a>
+    </div>
+  )}
+
+  <!-- R11: 정보 오류 책임 완화 — 정정 신고 + 면책고지 -->
+  <details class="small">
+    <summary>정보 정정 신고</summary>
+    <form onsubmit="event.preventDefault(); this.querySelector('.done').style.display='block';">
+      <p class="mut">잘못된 정보를 발견하셨나요? (데모: 실제 수집은 Worker→needs_review로 연결, §4.2)</p>
+      <input style="width:100%" name="correction" placeholder="예: 영업시간이 변경되었습니다 →" />
+      <button style="margin-top:8px">신고</button>
+      <span class="done" style="display:none;color:#16a34a">접수됐습니다. 검토 후 반영합니다.</span>
+    </form>
+  </details>
+
+  <p class="disclaimer">
+    본 정보는 공공·오픈데이터 기반으로 자동 정리되었으며 오류·지연이 있을 수 있습니다.
+    방문·거래 전 시설에 직접 확인하시기 바랍니다. 본 페이지는 법적 효력을 갖지 않습니다.
+  </p>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />
+</Base>

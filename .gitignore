@@ -1,0 +1,26 @@
+# deps
+node_modules/
+.pnp.*
+
+# env / secrets
+.env
+.env.local
+*.key
+
+# build output
+dist/
+.astro/
+packages/site/dist/
+
+# pipeline runtime data (원본 스냅샷은 별도 정책으로 관리)
+packages/data-pipeline/data/processed/
+packages/data-pipeline/data/cache/
+packages/data-pipeline/data/review-queue.json
+*.tmp
+
+# scored output (재생성 가능)
+packages/niche-scorer/data/scored.json
+
+# OS
+.DS_Store
+Thumbs.db
