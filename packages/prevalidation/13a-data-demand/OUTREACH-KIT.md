@@ -6,15 +6,18 @@
 
 ---
 
-## 0. 지금 손에 있는 자산
+## 0. 지금 손에 있는 자산 (2026-06-04 라이브)
 | 자산 | 위치 | 용도 |
 |---|---|---|
-| 랜딩(의향 수집) | `index.html` (배포 필요, `COLLECTOR_URL` 배선) | 의향·샘플요청·가격대 수집 |
-| 수집기 Worker | `collector/` (Cloudflare 무료) | 폼→KV 저장, `/count`로 통과 자동판정 |
+| 랜딩(영문, FDA) | **https://data.utilverse.info** (`index.html`) | 영어권 채널 도착지 — 의향·샘플요청·가격대 수집 |
+| 랜딩(국문, KC/RRA) | **https://data.utilverse.info/ko/** (`index.ko.html`) | 한국 채널용(2차 신호) |
+| 수집기(자체호스팅) | `collector/server.mjs` → 서버 `/opt/civicniche` (systemd `civicniche-13a`) | 폼→파일 저장, `/count` 통과 자동판정, `/export` 리드 회수 |
 | **티저 샘플 CSV(25행)** | `sample-fda-device-mfg-teaser.csv` | 잠재구매자에게 맛보기로 첨부 |
 | 전체 상품(1,654행) | `../../data-pipeline/data/processed/fda-device-mfg.sellable.csv` | 구매 시 제공분(현재 슬라이스) |
 
-**수집기·랜딩 배포(5분):** `README.md` 참조(`wrangler kv namespace create` → `wrangler deploy` → `index.html`의 `COLLECTOR_URL` 배선 → 랜딩 배포). 통과 확인: `curl …/count`.
+**상태 확인:** `curl https://data.utilverse.info/count` → `pass:true`(샘플≥5 또는 결제의향≥1) 자동판정.
+**리드 회수(샘플 발송용):** `curl "https://data.utilverse.info/export?token=<ADMIN_TOKEN>"` (토큰은 서버 systemd 유닛에 보관).
+> 배포·서버 구성은 [`../../../DEPLOY-RUNBOOK.md`] 및 메모리(infra-server-domain) 참조. (구 Cloudflare Worker판 `collector/worker.js`는 미사용·보존만.)
 
 ---
 
@@ -73,7 +76,7 @@
 ---
 
 ## 4. 측정 → 판정
-- 랜딩 `COLLECTOR_URL` 배선 후 `…/count`가 `sample>=5 OR presale>=1` 자동판정.
+- `curl https://data.utilverse.info/count` 가 `sample>=5 OR presale>=1` 자동판정(`pass` 필드).
 - 가격대 응답(`willingness`)에서 **$29+ 선택 비율**을 같이 본다(호기심 vs 지불의사 분리).
 - **기간 1~2주.** 결과 → [`LEARNING-GATES.md`](../../../LEARNING-GATES.md) Gate II 기록.
 - ⚠️ **과적합 금지:** 샘플요청은 '관심', 결제의향($+)은 더 강한 신호. 0이면 G9(직판 비가동) — 부끄러운 결과 아니라 **빌드 전에 산 값진 정보**.
