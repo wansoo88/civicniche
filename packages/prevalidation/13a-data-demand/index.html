@@ -33,6 +33,8 @@
   .primary{background:var(--acc);color:#fff}
   .ghost{background:#fff;border:1px solid #c8cdd5}
   .ok{color:var(--ok);font-weight:600;display:none;margin-top:14px}
+  .err{color:#b91c1c;font-weight:600;display:none;margin-top:14px}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;overflow:hidden}
   footer{color:var(--mut);font-size:12.5px;margin-top:34px;border-top:1px solid var(--line);padding-top:16px;line-height:1.55}
 </style>
 </head>
@@ -74,6 +76,7 @@
     <p class="small" style="margin-bottom:4px">No payment, no account. I'll email you a 25-row sample and follow up if the full set is useful.</p>
     <form id="f">
       <input type="hidden" name="product" value="fda" />
+      <div class="hp" aria-hidden="true"><label>Company website<input type="text" name="hp" tabindex="-1" autocomplete="off" /></label></div>
       <div class="grid">
         <div><label>Email</label><input type="email" name="email" required placeholder="you@company.com" /></div>
         <div><label>What do you do?</label>
@@ -103,6 +106,7 @@
         <button type="submit" class="ghost" data-intent="presale">I'd pre-order this</button>
       </div>
       <div class="ok" id="ok">Got it — I'll be in touch shortly with the sample.</div>
+      <div class="err" id="err">Couldn't send that — please check your connection and try again.</div>
     </form>
   </div>
 
@@ -115,18 +119,27 @@
   const COLLECTOR_URL = "/submit";
   const f = document.getElementById('f');
   const ok = document.getElementById('ok');
+  const err = document.getElementById('err');
+  const btns = [...f.querySelectorAll('button[type=submit]')];
   let intent = 'sample';
-  f.querySelectorAll('button[type=submit]').forEach(b =>
-    b.addEventListener('click', () => { intent = b.dataset.intent; }));
+  btns.forEach(b => b.addEventListener('click', () => { intent = b.dataset.intent; }));
   f.addEventListener('submit', async (e) => {
     e.preventDefault();
+    ok.style.display = 'none'; err.style.display = 'none';
     const data = Object.fromEntries(new FormData(f).entries());
     data.intent = intent;
+    btns.forEach(b => b.disabled = true);
     try {
-      await fetch(COLLECTOR_URL, { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify(data) });
-    } catch (err) { console.error(err); }
-    ok.style.display = 'block';
-    f.reset();
+      const res = await fetch(COLLECTOR_URL, { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify(data) });
+      if (!res.ok) throw new Error('HTTP ' + res.status);   // 4xx/5xx 도 실패로 처리(성공인 척 금지).
+      ok.style.display = 'block';
+      f.reset();
+    } catch (e2) {
+      console.error(e2);
+      err.style.display = 'block';                          // 실패 시 성공표시 대신 에러 안내 → 리드 유실/거짓확신 방지.
+    } finally {
+      btns.forEach(b => b.disabled = false);
+    }
   });
 </script>
 </body>

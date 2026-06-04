@@ -28,6 +28,8 @@
   button{cursor:pointer;border:0;border-radius:9px;padding:12px 18px;font-size:15px;font-weight:600}
   .primary{background:var(--acc);color:#fff}.ghost{background:#fff;border:1px solid #d4d8de}
   .ok{color:var(--ok);font-weight:600;display:none;margin-top:12px}
+  .err{color:#b91c1c;font-weight:600;display:none;margin-top:12px}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;overflow:hidden}
   .mut{color:var(--mut);font-size:13px}
   .demo{background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;font-size:13px;padding:10px 12px;border-radius:9px;margin-top:12px;display:none}
   footer{color:var(--mut);font-size:12px;margin-top:30px;border-top:1px solid var(--line);padding-top:16px}
@@ -65,6 +67,7 @@ R-R-MZ7-7,산업용 Wi-Fi AP MZ-7,마루테크,대한민국,적합인증,2023-11
     <strong>관심 있으세요? 사전 의향을 남겨주세요</strong>
     <p class="mut">결제하지 않습니다. 필요한 데이터·예산을 알려주시면 <b>샘플을 먼저</b> 보내드립니다.</p>
     <form id="f">
+      <div class="hp" aria-hidden="true"><label>회사 웹사이트<input type="text" name="hp" tabindex="-1" autocomplete="off" /></label></div>
       <label>관심 데이터셋</label>
       <select name="product" id="product">
         <option value="fda">① FDA 의료기기 계약제조사</option>
@@ -100,6 +103,7 @@ R-R-MZ7-7,산업용 Wi-Fi AP MZ-7,마루테크,대한민국,적합인증,2023-11
         <button type="submit" class="ghost" data-intent="sample">📄 샘플 먼저 받기</button>
       </div>
       <div class="ok" id="ok">✅ 접수됐습니다. 곧 샘플을 보내드릴게요. (수요 신호로 기록됨)</div>
+      <div class="err" id="err">전송에 실패했습니다 — 연결을 확인하고 다시 시도해 주세요.</div>
     </form>
     <div class="demo" id="demo">데모 모드: Worker 미설정 → 제출이 <code>localStorage</code>에 저장됩니다. 실제 수집은 <code>COLLECTOR_URL</code>을 채우세요.</div>
   </div>
@@ -117,6 +121,7 @@ R-R-MZ7-7,산업용 Wi-Fi AP MZ-7,마루테크,대한민국,적합인증,2023-11
 
   const f = document.getElementById('f');
   const ok = document.getElementById('ok');
+  const err = document.getElementById('err');
   const productSel = document.getElementById('product');
   if (!COLLECTOR_URL) document.getElementById('demo').style.display = 'block';
 
@@ -131,21 +136,30 @@ R-R-MZ7-7,산업용 Wi-Fi AP MZ-7,마루테크,대한민국,적합인증,2023-11
   document.querySelectorAll('.product').forEach(c=>c.addEventListener('click',()=>{productSel.value=c.dataset.product;highlight();}));
 
   let intent = 'presale';
-  f.querySelectorAll('button[type=submit]').forEach(b=>b.addEventListener('click',()=>{intent=b.dataset.intent;}));
+  const btns = [...f.querySelectorAll('button[type=submit]')];
+  btns.forEach(b=>b.addEventListener('click',()=>{intent=b.dataset.intent;}));
 
   f.addEventListener('submit', async (e)=>{
     e.preventDefault();
+    ok.style.display='none'; err.style.display='none';
     const data = Object.fromEntries(new FormData(f).entries());
-    data.intent = intent; data.ts = new Date().toISOString();
-    if (COLLECTOR_URL) {
-      try { await fetch(COLLECTOR_URL, {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)}); }
-      catch(err){ console.error(err); }
-    } else {
+    data.intent = intent;
+    if (!COLLECTOR_URL) {   // 개발용 폴백(현재는 항상 /submit 라 미사용)
       const s = JSON.parse(localStorage.getItem('civicniche_signals')||'[]');
       s.push(data); localStorage.setItem('civicniche_signals', JSON.stringify(s));
-      console.log('[13-A signal]', data, `(누적 ${s.length}건)`);
+      ok.style.display='block'; f.reset(); highlight(); return;
     }
-    ok.style.display='block'; f.reset(); highlight();
+    btns.forEach(b=>b.disabled=true);
+    try {
+      const res = await fetch(COLLECTOR_URL, {method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});
+      if (!res.ok) throw new Error('HTTP ' + res.status);   // 4xx/5xx 도 실패 처리(성공인 척 금지).
+      ok.style.display='block'; f.reset(); highlight();
+    } catch(e2) {
+      console.error(e2);
+      err.style.display='block';                            // 실패 시 에러 안내 → 리드 유실/거짓확신 방지.
+    } finally {
+      btns.forEach(b=>b.disabled=false);
+    }
   });
 </script>
 </body>

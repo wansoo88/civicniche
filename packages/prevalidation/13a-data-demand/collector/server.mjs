@@ -7,7 +7,7 @@
 // nginx 가 /submit /count /export 를 이 포트로 reverse-proxy 한다.
 
 import http from 'node:http';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, renameSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname } from 'node:path';
 
 const PORT = Number(process.env.PORT || 8787);
@@ -18,9 +18,20 @@ const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
 mkdirSync(dirname(DATA_FILE), { recursive: true });
 let store = {};
 if (existsSync(DATA_FILE)) {
-  try { store = JSON.parse(readFileSync(DATA_FILE, 'utf8')) || {}; } catch { store = {}; }
+  try {
+    store = JSON.parse(readFileSync(DATA_FILE, 'utf8')) || {};
+  } catch {
+    // 손상 파일을 빈 객체로 덮어써 데이터를 영구 소실하지 않도록 백업 후 시작(수동 복구 가능).
+    try { renameSync(DATA_FILE, `${DATA_FILE}.corrupt-${Date.now()}`); } catch { /* ignore */ }
+    store = {};
+  }
 }
-const persist = () => writeFileSync(DATA_FILE, JSON.stringify(store, null, 0));
+// 원자적 쓰기: temp 에 쓰고 rename 으로 교체 → 쓰기 도중 크래시해도 기존 파일이 손상되지 않음.
+const persist = () => {
+  const tmp = `${DATA_FILE}.tmp`;
+  writeFileSync(tmp, JSON.stringify(store, null, 0));
+  renameSync(tmp, DATA_FILE);
+};
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -33,10 +44,26 @@ const sigKey = (email, product) =>
 const send = (res, obj, status = 200) =>
   res.writeHead(status, { 'Content-Type': 'application/json', ...CORS }).end(JSON.stringify(obj));
 
-const readBody = (req) => new Promise((resolve) => {
-  let d = ''; req.on('data', (c) => { d += c; if (d.length > 1e6) req.destroy(); });
+const readBody = (req) => new Promise((resolve, reject) => {
+  let d = '';
+  req.on('data', (c) => { d += c; if (d.length > 1e6) { req.destroy(); reject(new Error('body too large')); } });
   req.on('end', () => resolve(d));
+  req.on('error', reject);          // 소켓 파괴/오류 시 프로미스가 영구 미해결로 매달리지 않게.
 });
+
+// --- 간이 IP 레이트리밋(스팸/카운트 조작 방어). nginx 가 X-Forwarded-For 전달. ---
+const RL_MAX = 20, RL_WINDOW = 60_000;   // IP당 분당 20건
+const rlHits = new Map();
+const clientIp = (req) =>
+  String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || '-';
+const rateLimited = (ip) => {
+  const now = Date.now();
+  const arr = (rlHits.get(ip) || []).filter((t) => now - t < RL_WINDOW);
+  arr.push(now);
+  rlHits.set(ip, arr);
+  if (rlHits.size > 5000) rlHits.clear();  // 메모리 상한(검증 규모엔 충분)
+  return arr.length > RL_MAX;
+};
 
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
@@ -44,8 +71,11 @@ const server = http.createServer(async (req, res) => {
 
   // 신호 저장(이메일+상품 단위 upsert)
   if (url.pathname === '/submit' && req.method === 'POST') {
+    if (rateLimited(clientIp(req))) return send(res, { ok: false, error: 'rate limited' }, 429);
     let body;
     try { body = JSON.parse(await readBody(req)); } catch { return send(res, { ok: false, error: 'bad json' }, 400); }
+    // 허니팟: 사람에겐 숨겨진 hp 필드가 채워졌으면 봇 → 성공인 척하고 저장 안 함(카운트 오염 방지).
+    if (body && body.hp) return send(res, { ok: true });
     if (!body || !body.email || !String(body.email).includes('@')) {
       return send(res, { ok: false, error: 'valid email required' }, 400);
     }
