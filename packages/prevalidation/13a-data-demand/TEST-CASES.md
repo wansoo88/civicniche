@@ -1,4 +1,7 @@
-# 13-A 랜딩 — 브라우저 수동 테스트 케이스
+# 13-A 랜딩 — 브라우저 테스트 케이스
+
+> 🤖 **자동 실행 가능:** 아래 케이스는 `browser-tests/`(Playwright 헤드리스 Chromium)로 자동화돼 있다 — `cd browser-tests && node run.mjs` (26 assertions, 전부 통과 확인됨). 사람이 직접 클릭할 필요 없음. 아래 표는 수동 확인용 참고.
+
 
 > 대상: **https://data.utilverse.info** (영문, root) · **https://data.utilverse.info/ko/** (국문)
 > 목적: 실제 Chrome에서 폼 제출·검증·집계가 눈으로 동작하는지 확인.

@@ -1,0 +1,13 @@
+{
+  "name": "civicniche-13a-browser-tests",
+  "version": "1.0.0",
+  "description": "TEST-CASES.md 자동 실행 — Playwright 헤드리스 Chromium으로 13-A 랜딩 검증",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node run.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.60.0"
+  }
+}
