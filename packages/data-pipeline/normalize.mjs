@@ -86,7 +86,9 @@ export async function normalizeAll(rawRecords) {
       id: `${slug}-${i}`,
       name,
       address,
-      region: r.region || deriveRegion(address), // 어댑터가 region을 직접 주면 우선
+      // 어댑터가 region 키를 주면 그 값을 권위로 사용(null도 존중) — deriveRegion의 첫-단어 폴백이
+      // 외국 주소("No.6","Room"…)를 region으로 오염시키는 것을 방지. region 키가 없는 소스만 추정.
+      region: ('region' in r) ? r.region : deriveRegion(address),
       lat: pickLat(r),
       lng: pickLng(r),
       hours: hours.value,

@@ -54,15 +54,15 @@
 >
 > **Title:** FDA-Registered Medical Device Contract Manufacturers — Cleaned & Deduplicated Directory (CSV/API, monthly refresh)
 >
-> **Description:** A normalized, deduplicated directory of FDA-registered medical device **contract manufacturers** (~65,000 establishment registrations, sourced from openFDA, public domain / CC0). Each record is consolidated to one canonical manufacturer with: product codes, device names, 510(k) numbers, device class, medical specialty, country, and registration number. We do the work openFDA's `skip` paging limit makes tedious — slicing by product code/country, merging duplicate registrations, and structuring it into one ready-to-use file. **Delivered as a one-time CSV snapshot, a monthly-refreshed subscription, or API access.**
+> **Description:** A normalized, deduplicated directory of FDA-registered medical device **contract manufacturers** — 65,049 establishment registrations (openFDA, public domain / CC0) consolidated into **7,130 unique manufacturers**, one canonical record each with: product codes, device names, 510(k) numbers, device class, medical specialty, country, and registration number. We do the work openFDA's `skip` paging limit makes tedious — slicing by country, merging duplicate registrations, and structuring it into one ready-to-use file. **Delivered as a one-time CSV snapshot, a monthly-refreshed subscription, or API access.**
 >
 > **Use cases:** medical-device sourcing & supplier discovery · regulatory/supply-chain mapping · sales lead lists · market research.
 > **Sample:** 25-row teaser available on request. **Pricing:** snapshot $29 · monthly $49 · API $99.
 
 ### (B) 커뮤니티 1회 게시 (가치선제공형, Reddit/IndieHackers)
-> **제목:** I cleaned & deduplicated the FDA's medical-device contract-manufacturer registry (~65k → structured) — sample inside
+> **제목:** I cleaned & deduplicated the FDA's medical-device contract-manufacturer registry (65,049 regs → 7,130 manufacturers) — free sample inside
 >
-> openFDA exposes device registration/listing, but it's tedious to actually use at scale: the `skip` paging caps out around 25k, duplicate registrations are everywhere, and product codes/device names are nested. I normalized a slice into one canonical-per-manufacturer table (product codes, 510(k), device class, country, reg #). Sharing a **25-row sample CSV** [link]. Curious if this is useful to anyone doing medtech sourcing / regulatory mapping — happy to share the cleaning approach. (Full set + monthly refresh exists if useful: [landing].)
+> openFDA exposes device registration/listing, but it's tedious to use at scale: the `skip` paging caps out around 25k, duplicate registrations are everywhere, and product codes/device names are nested. I pulled all 65,049 contract-manufacturer registrations and deduplicated them into 7,130 canonical manufacturers (one row each: product codes, 510(k), device class, country, reg #). Sharing a **free 1,000-row sample on Kaggle**: <KAGGLE_URL>. Curious if this is useful to anyone doing medtech sourcing / regulatory mapping — happy to share the cleaning approach. (Full 7,130 set + monthly refresh: https://data.utilverse.info)
 
 *규칙: 가치(샘플+방법)를 먼저. 하드셀 금지. 1개 커뮤니티당 1회. 셀프프로모 규정 확인.*
 

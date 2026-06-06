@@ -26,7 +26,9 @@ function mapResult(res) {
   return {
     _source: { name: 'openfda', url: BASE, license: 'CC0' },
     name: reg.name,
-    region: reg.state_code || reg.iso_country_code || null, // 어댑터가 region 직접 지정
+    // region = 주(州). openFDA state_code 는 US에서만 유효한 2자 주코드이고,
+    // 비-US 레코드엔 주소 조각("No.","Room","Building" 등) 쓰레기값이 들어옴 → US일 때만 채우고 그 외 공란.
+    region: (reg.iso_country_code || '').toUpperCase() === 'US' ? (reg.state_code || null) : null,
     road_addr: buildAddress(reg),
     reg_no: reg.registration_number || reg.fei_number || null,
     svc: deviceNames.join(','),                              // normalize가 services로 분해

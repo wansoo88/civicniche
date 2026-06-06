@@ -17,7 +17,10 @@ function realDataFieldCount(rec) {
 
 /** KW 수요 조합만 색인 — 실제로는 KW 데이터 연동. 여기선 '필수필드 충족'을 프록시로 사용. */
 function isIndexworthy(rec) {
-  return Boolean(rec.name && rec.region && realDataFieldCount(rec) >= 1);
+  // 지역 앵커: 주(region)가 이상적이나 국제 레코드는 주가 없을 수 있어 국가(country)로도 인정.
+  // (FDA 비-US 업체는 주 정보가 없지만 name+country+reg_no+제품코드로 충분한 페이지 깊이 확보.)
+  const hasLocality = Boolean(rec.region || rec.attributes?.country);
+  return Boolean(rec.name && hasLocality && realDataFieldCount(rec) >= 1);
 }
 
 /**
