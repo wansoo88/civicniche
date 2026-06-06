@@ -98,8 +98,8 @@
     <p class="lead">openFDA has the data; getting it usable at scale is the annoying part. I pulled the contract-manufacturer slice, merged the duplicate registrations, and flattened it to one row per manufacturer.</p>
     <div class="chips">
       <span class="chip">Source: <b>openFDA · CC0</b></span>
-      <span class="chip"><b>~65,000</b> registrations</span>
-      <span class="chip">1 row / manufacturer</span>
+      <span class="chip"><b>65,049</b> registrations</span>
+      <span class="chip">→ <b>7,130</b> unique manufacturers</span>
       <span class="chip">Monthly refresh</span>
     </div>
     <a class="cta" href="#get">Get the free sample →</a>
@@ -149,7 +149,7 @@
   <!-- honesty -->
   <div class="card">
     <h2>Can't I just pull this myself?</h2>
-    <p>You can — the source is public, and for a few hundred records it's easy. The full set is where it gets tedious: openFDA's <code>skip</code> paging caps out around 25,000 records, the same establishment shows up across dozens of listing documents, and product codes are nested inside each one. Assembling the whole ~65k set means slicing by product code and country, then deduping the overlaps. That's the work I've already done.</p>
+    <p>You can — the source is public, and for a few hundred records it's easy. The full set is where it gets tedious: openFDA's <code>skip</code> paging caps out around 25,000 records, and the same establishment shows up across dozens of listing documents. Assembling everything means slicing by country to get past the paging cap, then deduping <b>65,049 registrations down to 7,130 unique manufacturers</b>. That's the work I've already done.</p>
   </div>
 
   <!-- form -->

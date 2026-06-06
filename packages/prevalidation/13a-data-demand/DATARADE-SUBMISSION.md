@@ -23,10 +23,10 @@ Website: https://data.utilverse.info
 Contact: kimcomplete8888@gmail.com
 
 Product: FDA-Registered Medical Device Contract Manufacturers — a cleaned,
-deduplicated directory built from openFDA (US public domain / CC0). One canonical
-record per manufacturer with product codes, 510(k)s, device class, specialty,
-country, and FDA registration number. Delivered as CSV snapshot, monthly
-subscription, or API.
+deduplicated directory built from openFDA (US public domain / CC0). 65,049
+registrations deduplicated to 7,130 unique manufacturers, one canonical record
+each with product codes, 510(k)s, device class, specialty, country, and FDA
+registration number. Delivered as CSV snapshot, monthly subscription, or API.
 
 Pricing: $29 snapshot / $49 monthly / $99 API. A 25-row sample is ready.
 
@@ -42,7 +42,7 @@ Could you set up a provider storefront for us? Thanks.
 | **Full description** | ↓ 아래 블록 |
 | **Categories / tags** | Healthcare & Medical Data · Company Data · Manufacturing · Regulatory / Compliance · B2B Sourcing · Firmographics |
 | **Use cases** | 의료기기 소싱·공급사 발견 / 규제·공급망 매핑(RA·QA) / 서비스업체 영업 리드 / 시장·경쟁 리서치 |
-| **Coverage / freshness** | United States FDA registry (전 세계 등록 제조사). 모수 ~65,000 계약제조사 등록. openFDA에서 월 갱신. |
+| **Coverage / freshness** | United States FDA registry (전 세계 등록 제조사). 65,049 계약제조사 등록 → 7,130 고유 제조사(중복제거 후). openFDA에서 월 갱신. |
 | **Pricing** | Snapshot CSV **$29** · Monthly **$49/mo** · API **$99/mo** |
 | **Delivery** | CSV download (one-time) · monthly-refreshed CSV (subscription) · API access |
 | **Sample** | `sample-fda-clean-teaser.csv` (깔끔한 25행) 첨부/링크 |
@@ -55,9 +55,10 @@ openFDA (public domain / CC0), but it's tedious to use at scale: the API's `skip
 paging caps out around 25,000 records, the same establishment appears across many
 listing documents, and product codes / device names are nested.
 
-This dataset solves that. We pull the contract-manufacturer slice (~65,000
-establishment registrations), merge duplicate registrations into one canonical
-record per manufacturer, and structure each into a single ready-to-use row:
+This dataset solves that. We pull all 65,049 contract-manufacturer
+registrations, merge duplicate registrations into one canonical record per
+manufacturer (7,130 unique manufacturers), and structure each into a single
+ready-to-use row:
 
 - Company name, full address, country, state/region
 - FDA registration number (FEI)
@@ -71,7 +72,7 @@ access. The value is in the cleaning, de-duplication, completeness, and freshnes
 — not in data you couldn't otherwise get (the source is public).
 ```
 
-> ⚠️ 정직 가드(과장 금지): "검증됨(verified)"으로 표현하지 말 것 — 단일 출처(openFDA), 교차검증 전. "정제·중복제거·구조화·최신성"으로만 판다. 현재 제공 정제본은 1,654 정규 레코드(4,000행 슬라이스 기반); 전건 65k는 별도 유지.
+> ⚠️ 정직 가드(과장 금지): "검증됨(verified)"으로 표현하지 말 것 — 단일 출처(openFDA), 교차검증 전. "정제·중복제거·구조화·최신성"으로만 판다. **전건 보유**: 65,049 등록 → **7,130 고유 제조사**(reg_no 기준 7,088과 ~1% 일치 검증). 월 갱신은 수동 재실행(자동화 전).
 
 ---
 
@@ -80,18 +81,19 @@ access. The value is in the cleaning, de-duplication, completeness, and freshnes
 > 목적: 발견성·신뢰 + 수요 신호(다운로드·문의). 수익 아님. 랜딩 링크로 전건 유도.
 
 ### 업로드 파일
-- **`kaggle-fda-contract-manufacturers.csv`** (1,654행, 11열 — 깔끔한 FDA 전용)
+- **`kaggle-fda-contract-manufacturers-sample.csv`** (1,000행 샘플 — 무료 공개용)
+- 전건(유료 납품)은 `fda-contract-manufacturers-full.csv` (7,130행)
 
 ### 데이터셋 카드 (복붙)
 - **Title:** FDA Medical Device Contract Manufacturers (Cleaned & Deduplicated)
-- **Subtitle:** ~1,654 canonical contract manufacturers from openFDA — product codes, 510(k), device class, country
+- **Subtitle:** 1,000-row sample of FDA contract manufacturers from openFDA (full set: 7,130) — product codes, 510(k), device class, country
 - **Description / Methodology / Columns / Caveats:** [`LISTINGS-EN.md`](./LISTINGS-EN.md) §2 전체 복붙. "Full set + monthly refresh: https://data.utilverse.info" 링크 포함.
 - **Tags:** healthcare, medical-devices, manufacturing, regulatory, companies, fda, open-data
 - **License:** CC0 (출처 openFDA 퍼블릭도메인과 일치)
 
 ### 단계
 1. kaggle.com 로그인 → Datasets → New Dataset
-2. `kaggle-fda-contract-manufacturers.csv` 업로드, 위 카드 입력
+2. `kaggle-fda-contract-manufacturers-sample.csv` 업로드, 위 카드 입력
 3. 공개(Public) 게시 → URL 확보
 4. 랜딩(`data.utilverse.info`)·Datarade·커뮤니티 글에 Kaggle 링크 교차 게시
 5. 다운로드 수·코멘트·"전건 있나요?" 문의 = 수요 신호로 관찰

@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fetchSampleOfficial, fetchSampleOSM } from './adapters/sample.mjs';
 import { fetchOSM } from './adapters/source-osm.mjs';
 import { fetchPublicData } from './adapters/source-publicdata.mjs';
-import { fetchFDA } from './adapters/source-fda.mjs';
+import { fetchFDA, fetchFDAAll } from './adapters/source-fda.mjs';
 import { fetchRRA } from './adapters/source-rra.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -16,7 +16,11 @@ const NICHE_SOURCES = {
   sample: async () => [...fetchSampleOfficial(), ...fetchSampleOSM()],
 
   // ② 추천 차선 — FDA 의료기기 계약제조사 (openFDA, CC0, 키 불필요 → 라이브)
-  'fda-device-mfg': async () => fetchFDA({ maxPages: Number(process.env.FDA_MAX_PAGES || 3) }),
+  // FDA_FULL=1 이면 국가 슬라이싱으로 전건(~65k) 수집, 아니면 샘플 페이징.
+  'fda-device-mfg': async () =>
+    process.env.FDA_FULL === '1'
+      ? fetchFDAAll()
+      : fetchFDA({ maxPages: Number(process.env.FDA_MAX_PAGES || 3) }),
 
   // ① 추천 1순위 — KC/전파 적합성평가 (RRA, data.go.kr, 키 있으면 라이브·없으면 샘플)
   'rra-cert-kr': async () => fetchRRA(),

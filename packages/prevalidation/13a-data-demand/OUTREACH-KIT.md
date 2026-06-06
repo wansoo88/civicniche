@@ -13,8 +13,8 @@
 | 랜딩(국문, KC/RRA) | **https://data.utilverse.info/ko/** (`index.ko.html`) | 한국 채널용(2차 신호) |
 | 수집기(자체호스팅) | `collector/server.mjs` → 서버 `/opt/civicniche` (systemd `civicniche-13a`) | 폼→파일 저장, `/count` 통과 자동판정, `/export` 리드 회수 |
 | **티저 샘플 CSV(25행, 깔끔)** | `sample-fda-clean-teaser.csv` | 잠재구매자에게 맛보기로 첨부 |
-| Kaggle 공개용(1,654행, 깔끔) | `kaggle-fda-contract-manufacturers.csv` | Kaggle 무료 공개 + 전건 유도 |
-| 전체 상품(1,654행) | `../../data-pipeline/data/processed/fda-device-mfg.sellable.csv` | 구매 시 제공분(현재 슬라이스) |
+| Kaggle 샘플(1,000행) | `kaggle-fda-contract-manufacturers-sample.csv` | Kaggle 무료 공개 + 전건 유도 |
+| **전건 상품(7,130행)** | `fda-contract-manufacturers-full.csv` | 구매 시 제공(65,049 등록 → 7,130 고유 제조사) |
 
 **상태 확인:** `curl https://data.utilverse.info/count` → `pass:true`(샘플≥5 또는 결제의향≥1) 자동판정.
 **리드 회수(샘플 발송용):** `curl "https://data.utilverse.info/export?token=<ADMIN_TOKEN>"` (토큰은 서버 systemd 유닛에 보관).
@@ -25,7 +25,7 @@
 ## 1. 상품 정의 (정직 버전)
 **FDA 등록 의료기기 계약제조사(Contract Manufacturer) 정제 데이터셋.**
 - **모수:** openFDA `device/registrationlisting` 중 계약제조사 **약 65,000 등록**(CC0 퍼블릭도메인).
-- **가공 가치(진짜 차별점):** 원시 등록을 **중복제거(중복 등록 통합)·정규화·구조화** → 업체당 1 정규 레코드 + 제품코드·디바이스명·510(k)·디바이스클래스·의료전문분야·제조국·등록번호. (현재 4,000 표본 → **1,654 정규 레코드, 655 중복 클러스터 병합**.)
+- **가공 가치(진짜 차별점):** 원시 등록을 **중복제거(중복 등록 통합)·정규화·구조화** → 업체당 1 정규 레코드 + 제품코드·디바이스명·510(k)·디바이스클래스·의료전문분야·제조국·등록번호. (**전건 65,049 등록 → 7,130 고유 제조사, 4,856 중복 클러스터 병합**. reg_no(FEI) 기준 7,088과 ~1% 일치 검증.)
 - **포지셔닝:** "스냅샷"이 아니라 **전건 + 월 갱신 구독 + API**. 재판매 방어는 '정적 파일'이 아니라 **'최신성'**에서 나옴(R18).
 - **정직한 약점 2가지(영업 시 숨기지 말 것):**
   1. **단일 출처**(openFDA만) → 아직 2차 교차검증 아님. "구조화·완전성·최신성"으로 팔되 "검증됨"으로 과장 금지.

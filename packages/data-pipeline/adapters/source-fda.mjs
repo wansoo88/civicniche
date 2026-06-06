@@ -69,3 +69,60 @@ export async function fetchFDA(opts = {}) {
   }
   return out.filter((r) => r.name);
 }
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function getJSON(url, tries = 3) {
+  for (let i = 0; i < tries; i += 1) {
+    try {
+      const res = await fetch(url);
+      if (res.status === 404) return { results: [] }; // openFDA: 결과 없음
+      if (res.status === 429) { await sleep(2000 * (i + 1)); continue; } // 레이트리밋 백오프
+      if (!res.ok) throw new Error(`openFDA ${res.status}`);
+      return await res.json();
+    } catch (e) {
+      if (i === tries - 1) throw e;
+      await sleep(800 * (i + 1));
+    }
+  }
+  return { results: [] };
+}
+
+/**
+ * 전건 수집(§3.2 skip 상한 우회). openFDA skip 상한(~25k)을 국가 슬라이싱으로 우회한다.
+ * 어떤 국가도 25k 미만이면(현재 최대 US ~24.7k) 국가별 단순 페이징으로 전건 확보.
+ * @returns {Promise<Array>} raw 레코드(약 65k)
+ */
+export async function fetchFDAAll(opts = {}) {
+  const baseSearch = `establishment_type:"${CONTRACT_MFG}"`;
+  const limit = 100;
+  const delayMs = opts.delayMs ?? 300; // 무키 240/min 존중
+  // 1) 국가 분포
+  const countURL = `${BASE}?search=${encodeURIComponent(baseSearch)}&count=registration.iso_country_code`;
+  const countData = await getJSON(countURL);
+  const countries = (countData.results || []).map((x) => ({ term: x.term, count: x.count }));
+  if (!countries.length) {
+    console.warn('⚠️  국가 분포 0 → 단순 페이징 폴백');
+    return fetchFDA({ maxPages: 250 });
+  }
+  const total = countries.reduce((s, c) => s + c.count, 0);
+  console.log(`  openFDA 전건 수집: ${countries.length}개국, 합계 ${total} 레코드`);
+  const out = [];
+  let calls = 0;
+  for (const { term, count } of countries) {
+    if (count > 25000) console.warn(`  ⚠️  ${term} ${count} > 25k: skip 상한 초과분 누락 가능(주 단위 재분할 필요)`);
+    const search = `${baseSearch} AND registration.iso_country_code:${term}`;
+    const pages = Math.ceil(Math.min(count, 25000) / limit);
+    for (let p = 0; p < pages; p += 1) {
+      const url = `${BASE}?search=${encodeURIComponent(search)}&limit=${limit}&skip=${p * limit}`;
+      const data = await getJSON(url);
+      const results = data.results || [];
+      for (const r of results) out.push(mapResult(r));
+      calls += 1;
+      if (results.length < limit) break;
+      await sleep(delayMs);
+    }
+    console.log(`  ${term}: ${count}건 수집 (누적 ${out.length}, 호출 ${calls})`);
+  }
+  return out.filter((r) => r.name);
+}
