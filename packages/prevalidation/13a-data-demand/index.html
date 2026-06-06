@@ -3,34 +3,76 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>FDA Contract-Manufacturer Dataset — cleaned & deduplicated</title>
+<title>FDA Contract-Manufacturer Dataset — cleaned & deduplicated | Utilverse Data</title>
 <meta name="description" content="A cleaned, deduplicated directory of FDA-registered medical device contract manufacturers, built from openFDA. Product codes, 510(k), device class, country. CSV, monthly refresh, or API." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d4ed8'/%3E%3Ctext x='32' y='45' font-size='38' text-anchor='middle' fill='white' font-family='Arial,sans-serif' font-weight='bold'%3EU%3C/text%3E%3C/svg%3E" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Utilverse Data" />
+<meta property="og:url" content="https://data.utilverse.info/" />
+<meta property="og:title" content="FDA Contract-Manufacturer Dataset — cleaned & deduplicated" />
+<meta property="og:description" content="openFDA's contract-manufacturer registry, deduplicated into one row per manufacturer. Product codes, 510(k), device class, country. Free sample." />
+<meta name="twitter:card" content="summary" />
 <style>
-  :root{--fg:#1a1c20;--mut:#6b7280;--acc:#1d4ed8;--card:#f7f8fa;--line:#e7eaee;--ok:#15803d}
+  :root{--fg:#16181d;--mut:#6b7280;--acc:#1d4ed8;--acc-d:#1e40af;--card:#f7f8fa;--line:#e7eaee;--ok:#15803d}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--fg);line-height:1.6;background:#fff}
-  .wrap{max-width:720px;margin:0 auto;padding:48px 20px 80px}
-  .top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mut)}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px 80px}
+  .top{display:flex;justify-content:space-between;align-items:center;padding:18px 0;font-size:13px;color:var(--mut)}
+  .brand{font-weight:700;color:var(--fg);letter-spacing:-.01em}
+  .brand span{color:var(--acc)}
+  a{color:var(--acc);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* hero */
+  .hero{background:linear-gradient(180deg,#f4f7ff 0%,#fff 100%);border:1px solid var(--line);border-radius:16px;padding:34px 28px;margin-top:6px}
   .badge{display:inline-block;background:#eef2ff;color:#3730a3;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px}
-  a{color:var(--acc)}
-  h1{font-size:29px;line-height:1.25;margin:18px 0 12px;letter-spacing:-.01em}
-  .lead{color:#374151;font-size:17px;margin-bottom:8px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px;margin:22px 0}
-  h2{font-size:16px;margin-bottom:10px}
-  ul{margin:0 0 0 18px}
-  li{margin:3px 0;font-size:15px}
-  .price{font-weight:600}
-  .price b{color:var(--acc)}
-  pre{background:#0f172a;color:#cbd5e1;border-radius:8px;padding:12px;overflow:auto;font-size:11.5px;line-height:1.55;margin-top:12px}
+  h1{font-size:31px;line-height:1.2;margin:14px 0 12px;letter-spacing:-.02em}
+  .lead{color:#374151;font-size:17px;max-width:60ch}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600;color:#374151}
+  .chip b{color:var(--acc)}
+  .cta{display:inline-block;background:var(--acc);color:#fff;font-weight:600;font-size:15px;padding:12px 22px;border-radius:9px;margin-top:16px}
+  .cta:hover{background:var(--acc-d);text-decoration:none}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:22px 0}
+  h2{font-size:17px;margin-bottom:12px;letter-spacing:-.01em}
   p{font-size:15px}
+  ul{margin:0 0 0 18px}
+  li{margin:4px 0;font-size:15px}
   .small{color:var(--mut);font-size:13px}
+  code{background:#eef0f3;border-radius:4px;padding:1px 5px;font-size:13px}
+
+  /* data table */
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:9px;margin-top:6px;background:#fff}
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th,td{padding:9px 12px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--line)}
+  thead th{background:#f1f3f6;color:#374151;font-weight:700;position:sticky;top:0}
+  tbody tr:last-child td{border-bottom:0}
+  .cap{color:var(--mut);font-size:12px;margin-top:8px}
+
+  /* pricing */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px}
+  .tier{background:#fff;border:1px solid var(--line);border-radius:11px;padding:16px;text-align:center}
+  .tier.pop{border:1.5px solid var(--acc);box-shadow:0 0 0 3px #2563eb1a}
+  .tier .name{font-size:13px;color:var(--mut);font-weight:600}
+  .tier .amt{font-size:23px;font-weight:700;margin:4px 0}
+  .tier .amt b{color:var(--acc)}
+  .tier .per{font-size:12px;color:var(--mut)}
+  .poptag{display:inline-block;background:var(--acc);color:#fff;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;margin-bottom:6px}
+  @media(max-width:560px){.tiers{grid-template-columns:1fr}}
+
+  /* form */
   label{display:block;font-weight:600;margin:14px 0 5px;font-size:14px}
-  input,select,textarea{width:100%;padding:10px 12px;border:1px solid #d3d8df;border-radius:8px;font-size:15px;font-family:inherit;background:#fff}
+  input,select,textarea{width:100%;padding:11px 12px;border:1px solid #d3d8df;border-radius:8px;font-size:15px;font-family:inherit;background:#fff}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px #2563eb1f}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   @media(max-width:540px){.grid{grid-template-columns:1fr}}
   .btns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-  button{cursor:pointer;border:0;border-radius:8px;padding:12px 18px;font-size:15px;font-weight:600}
+  button{cursor:pointer;border:0;border-radius:9px;padding:12px 18px;font-size:15px;font-weight:600}
+  button:disabled{opacity:.6;cursor:default}
   .primary{background:var(--acc);color:#fff}
+  .primary:hover:not(:disabled){background:var(--acc-d)}
   .ghost{background:#fff;border:1px solid #c8cdd5}
   .ok{color:var(--ok);font-weight:600;display:none;margin-top:14px}
   .err{color:#b91c1c;font-weight:600;display:none;margin-top:14px}
@@ -41,37 +83,73 @@
 <body>
 <div class="wrap">
   <div class="top">
-    <span class="badge">Pre-launch — gauging interest</span>
+    <span class="brand">Utilverse<span> Data</span></span>
     <a href="/ko/">한국어</a>
   </div>
 
-  <h1>FDA-registered medical device contract manufacturers, cleaned up.</h1>
-  <p class="lead">openFDA has the data. Getting it into something usable at scale is the annoying part. I pulled the contract-manufacturer slice, merged the duplicate registrations, and flattened it to one row per manufacturer.</p>
-  <p class="small">The sample's free. Tell me which product codes or device types you care about and I'll send it over.</p>
-
-  <div class="card">
-    <h2>What's in each record</h2>
-    <ul>
-      <li>One canonical record per manufacturer (duplicate registrations merged)</li>
-      <li>All product codes, unioned across the manufacturer's listings</li>
-      <li>Device names and device class (I / II / III)</li>
-      <li>510(k) numbers where present, medical specialty</li>
-      <li>FDA registration number (FEI), full address, country</li>
-    </ul>
-    <pre>reg_no,name,state,country,product_codes,device_names,device_class
-3000170817,Acero Precision,PA,US,"KWQ; KWP; NKB","Appliance; Fixation; Spinal Intervertebral Body",2
-3009631939,Red Star Contract Manufacturing Inc.,IN,US,"JDR","Staple; Fixation; Bone",2</pre>
-    <p class="small" style="margin-top:10px">~65,000 contract-manufacturer registrations in the source. Built from openFDA (US public domain, CC0), refreshed monthly. Delivered as a one-time CSV, a monthly subscription, or API access.</p>
-    <p class="price" style="margin-top:14px">Snapshot <b>$29</b> &nbsp;·&nbsp; Monthly <b>$49</b> &nbsp;·&nbsp; API <b>$99</b></p>
-    <p class="small">Not charging yet — I'm working out whether it's worth maintaining. That's what this page is for.</p>
+  <!-- hero -->
+  <div class="hero">
+    <span class="badge">Pre-launch — gauging interest</span>
+    <h1>FDA contract manufacturers,<br/>cleaned &amp; deduplicated.</h1>
+    <p class="lead">openFDA has the data; getting it usable at scale is the annoying part. I pulled the contract-manufacturer slice, merged the duplicate registrations, and flattened it to one row per manufacturer.</p>
+    <div class="chips">
+      <span class="chip">Source: <b>openFDA · CC0</b></span>
+      <span class="chip"><b>~65,000</b> registrations</span>
+      <span class="chip">1 row / manufacturer</span>
+      <span class="chip">Monthly refresh</span>
+    </div>
+    <a class="cta" href="#get">Get the free sample →</a>
   </div>
 
+  <!-- data preview -->
+  <div class="card">
+    <h2>A look at the data</h2>
+    <div class="tablewrap">
+      <table class="mono">
+        <thead><tr><th>reg_no</th><th>name</th><th>state</th><th>country</th><th>product_codes</th><th>class</th></tr></thead>
+        <tbody>
+          <tr><td>3000170817</td><td>Acero Precision</td><td>PA</td><td>US</td><td>KWQ; KWP; NKB</td><td>2</td></tr>
+          <tr><td>3008253024</td><td>Central Medicare Sdn Bhd</td><td>MY</td><td>MY</td><td>LZA</td><td>1</td></tr>
+          <tr><td>3009631939</td><td>Red Star Contract Mfg Inc.</td><td>IN</td><td>US</td><td>JDR</td><td>2</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap">Each record also carries device names, medical specialty, 510(k) numbers (where present), full address, and FDA registration number (FEI).</p>
+    <p class="small" style="margin-top:12px">Delivered as a one-time CSV, a monthly-refreshed subscription, or API access.</p>
+  </div>
+
+  <!-- pricing -->
+  <div class="card">
+    <h2>Pricing</h2>
+    <div class="tiers">
+      <div class="tier">
+        <div class="name">Snapshot CSV</div>
+        <div class="amt"><b>$29</b></div>
+        <div class="per">one-time download</div>
+      </div>
+      <div class="tier pop">
+        <span class="poptag">MOST USEFUL</span>
+        <div class="name">Monthly</div>
+        <div class="amt"><b>$49</b></div>
+        <div class="per">refreshed CSV / mo</div>
+      </div>
+      <div class="tier">
+        <div class="name">API</div>
+        <div class="amt"><b>$99</b></div>
+        <div class="per">access / mo</div>
+      </div>
+    </div>
+    <p class="small" style="margin-top:14px">Not charging yet — I'm working out whether it's worth maintaining. That's what this page is for.</p>
+  </div>
+
+  <!-- honesty -->
   <div class="card">
     <h2>Can't I just pull this myself?</h2>
     <p>You can — the source is public, and for a few hundred records it's easy. The full set is where it gets tedious: openFDA's <code>skip</code> paging caps out around 25,000 records, the same establishment shows up across dozens of listing documents, and product codes are nested inside each one. Assembling the whole ~65k set means slicing by product code and country, then deduping the overlaps. That's the work I've already done.</p>
   </div>
 
-  <div class="card">
+  <!-- form -->
+  <div class="card" id="get">
     <h2>Want the sample?</h2>
     <p class="small" style="margin-bottom:4px">No payment, no account. I'll email you a 25-row sample and follow up if the full set is useful.</p>
     <form id="f">

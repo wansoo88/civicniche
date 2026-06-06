@@ -30,7 +30,7 @@ try {
   // ---- A. 로드 & 표시 ----
   await page.goto(BASE + '/', { waitUntil: 'networkidle' });
   const bodyText = await page.textContent('body');
-  chk('A1 영문 제목 표시', bodyText.includes('contract manufacturers, cleaned up'));
+  chk('A1 영문 제목 표시', bodyText.includes('contract manufacturers') && bodyText.includes('deduplicated'));
   chk('A1 한국어 링크 존재', (await page.locator('a', { hasText: '한국어' }).count()) === 1);
   chk('A1 배지 표시', bodyText.includes('Pre-launch'));
   chk('A1 가격 표시', bodyText.includes('$29') && bodyText.includes('$49') && bodyText.includes('$99'));
@@ -102,7 +102,7 @@ try {
   await page.waitForLoadState('networkidle');
   chk('A3 /ko/ 로 이동', page.url().includes('/ko'));
   const koText = await page.textContent('body');
-  chk('A3 한국어 카피 표시', koText.includes('즉시 쓰는 CSV·API로'));
+  chk('A3 한국어 카피 표시', koText.includes('계약제조사') && koText.includes('규제·인증 데이터셋'));
   chk('A3 English 복귀 링크', (await page.locator('a', { hasText: 'English' }).count()) >= 1);
 
   // ---- B3. 한국어 폼 제출도 같은 컬렉터로 수집 ----
