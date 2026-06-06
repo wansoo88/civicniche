@@ -24,7 +24,14 @@ const toRow = (r) => {
 };
 const csv = (list) => [cols.join(','), ...list.map(toRow)].join('\n') + '\n';
 
+// 캐글 샘플은 전 구간에서 균등 추출(국가순 정렬이라 stride 추출 시 84개국이 고루 섞임 → 글로벌 커버리지 시연).
+const stride = Math.max(1, Math.floor(rows.length / KAGGLE_SAMPLE_N));
+const sample = rows.filter((_, i) => i % stride === 0).slice(0, KAGGLE_SAMPLE_N);
+// 티저 25행도 균등 추출(다양한 국가가 보이게).
+const teaserStride = Math.max(1, Math.floor(rows.length / 25));
+const teaser = rows.filter((_, i) => i % teaserStride === 0).slice(0, 25);
+
 writeFileSync('fda-contract-manufacturers-full.csv', csv(rows));
-writeFileSync('kaggle-fda-contract-manufacturers-sample.csv', csv(rows.slice(0, KAGGLE_SAMPLE_N)));
-writeFileSync('sample-fda-clean-teaser.csv', csv(rows.slice(0, 25)));
-console.log(`✓ full ${rows.length}행 / kaggle-sample ${Math.min(KAGGLE_SAMPLE_N, rows.length)}행 / teaser 25행`);
+writeFileSync('kaggle-fda-contract-manufacturers-sample.csv', csv(sample));
+writeFileSync('sample-fda-clean-teaser.csv', csv(teaser));
+console.log(`✓ full ${rows.length}행 / kaggle-sample ${sample.length}행(균등) / teaser ${teaser.length}행(균등)`);
