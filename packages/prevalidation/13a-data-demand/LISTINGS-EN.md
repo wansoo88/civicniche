@@ -70,27 +70,28 @@
 > - Not affiliated with or endorsed by the FDA. Provided as-is.
 >
 > ## Methodology
-> 1. Fetched the contract-manufacturer slice from openFDA.
-> 2. **Deduplicated**: the same establishment appears across many listing documents; these are merged into one canonical record (product codes / device classes / specialties / 510(k)s unioned).
+> 1. Fetched **all 65,049 contract-manufacturer registrations** from openFDA (sliced by country to get past the API's ~25,000 `skip` paging limit).
+> 2. **Deduplicated**: the same establishment appears across many listing documents; these are merged into one canonical record per manufacturer — product codes, device classes, specialties, and 510(k)s unioned. Result: **7,130 unique manufacturers** (matches the distinct FDA registration-number count within ~1%).
 > 3. Normalized fields and structured into a flat table.
 >
 > ## Columns
 > | column | description |
 > |---|---|
 > | `name` | manufacturer name |
-> | `country`, `region` | ISO country, state/region |
+> | `country` | ISO country code |
+> | `state` | state / region |
 > | `address` | full registered address |
 > | `reg_no` | FDA registration / FEI number |
 > | `product_codes` | FDA product codes (semicolon-separated) |
-> | `services` / `device_names` | device names produced |
-> | `device_classes` | FDA device class (1/2/3) |
-> | `specialties` | medical specialty |
+> | `device_names` | device names produced (semicolon-separated) |
+> | `device_class` | FDA device class (1 / 2 / 3) |
+> | `specialty` | medical specialty |
 > | `k_numbers` | 510(k) clearance numbers (where present) |
-> | `sources` | data source (openfda) |
+> | `source` | data source (openFDA) |
 >
 > ## Caveats (honest)
 > - **Single source** (openFDA) — not yet cross-verified against a second registry.
-> - This is a **1,000-row sample**; the full **7,130-manufacturer** set (deduplicated from 65,049 registrations) + monthly refresh is available via the landing ([landing link]).
+> - This is a **1,000-row sample** spanning 44 countries; the full **7,130-manufacturer** set (deduplicated from 65,049 registrations) + monthly refresh is available at https://data.utilverse.info
 > - Registry data can lag reality; verify before relying on it for compliance decisions.
 >
 > ## Tags
