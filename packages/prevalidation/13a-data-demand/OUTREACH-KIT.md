@@ -12,7 +12,8 @@
 | 랜딩(영문, FDA) | **https://data.utilverse.info** (`index.html`) | 영어권 채널 도착지 — 의향·샘플요청·가격대 수집 |
 | 랜딩(국문, KC/RRA) | **https://data.utilverse.info/ko/** (`index.ko.html`) | 한국 채널용(2차 신호) |
 | 수집기(자체호스팅) | `collector/server.mjs` → 서버 `/opt/civicniche` (systemd `civicniche-13a`) | 폼→파일 저장, `/count` 통과 자동판정, `/export` 리드 회수 |
-| **티저 샘플 CSV(25행)** | `sample-fda-device-mfg-teaser.csv` | 잠재구매자에게 맛보기로 첨부 |
+| **티저 샘플 CSV(25행, 깔끔)** | `sample-fda-clean-teaser.csv` | 잠재구매자에게 맛보기로 첨부 |
+| Kaggle 공개용(1,654행, 깔끔) | `kaggle-fda-contract-manufacturers.csv` | Kaggle 무료 공개 + 전건 유도 |
 | 전체 상품(1,654행) | `../../data-pipeline/data/processed/fda-device-mfg.sellable.csv` | 구매 시 제공분(현재 슬라이스) |
 
 **상태 확인:** `curl https://data.utilverse.info/count` → `pass:true`(샘플≥5 또는 결제의향≥1) 자동판정.
